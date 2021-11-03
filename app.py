@@ -89,7 +89,39 @@ class Items(db.Model):
         """
         Determines what happens when we print an instance of the class
         """
-        return f"<Seller {self.seller_id}>"
+        return f"<Item {self.item_id}>"
+
+
+class BuyerItems(db.Model):
+    """
+    Model for saved artists
+    """
+
+    buyer_id = db.Column(db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer)
+    username = db.Column(db.String(80), nullable=False)
+
+    def __repr__(self):
+        """
+        Determines what happens when we print an instance of the class
+        """
+        return f"<Buyer {self.buyer_id}>"
+
+
+class SellerItems(db.Model):
+    """
+    Model for saved artists
+    """
+
+    seller_id = db.Column(db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer)
+    username = db.Column(db.String(80), nullable=False)
+
+    def __repr__(self):
+        """
+        Determines what happens when we print an instance of the class
+        """
+        return f"<Buyer {self.buyer_id}>"
 
 
 db.create_all()
