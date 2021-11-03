@@ -26,9 +26,9 @@ const solutions = [
     icon: CurrencyDollarIcon,
   },
   { 
-    name: 'Derek (Big D) Yong', 
-    description: "Big D no cap", 
-    href: '#', 
+    name: 'Derek Yong', 
+    description: "Master D", 
+    href: 'https://github.com/derekyong1', 
     icon:  LightningBoltIcon},
   {
     name: 'Johnathan Choi',
