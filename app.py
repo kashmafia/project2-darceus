@@ -1,9 +1,7 @@
-import random
 import os
+import datetime
 from dotenv import load_dotenv, find_dotenv
 import json
-import datetime
-
 import flask
 from flask import jsonify, render_template, redirect, flash, request
 from flask_sqlalchemy import SQLAlchemy
