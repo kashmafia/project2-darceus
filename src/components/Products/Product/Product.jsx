@@ -24,14 +24,17 @@ const Product = ({ product }) => {
                 </div>
                 
                 {/* Description */}
-                <Typography variant="h2">
+                <Typography variant="body2" color="textSecondary">
                     {product.description}
                 </Typography>               
             </CardContent>
 
             <CardActions disableSpacing className={classes.cardActions}>
                 <IconButton aria-label="Add to Cart">
-                    <AddShoppingCart/>
+
+                    {/* TODO: Implement Shopping Cart */}
+                    <AddShoppingCart/> 
+                    
                 </IconButton>
             </CardActions>
         </Card>

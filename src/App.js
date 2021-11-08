@@ -1,10 +1,12 @@
 import './App.css';
 import Hero from './components/Hero';
-// import Dashboard from './components/Dashboard';
+import Dashboard from './components/Dashboard';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
-import Products from './components/Products/Products';
+// import Products from './components/Products/Products';
+import Cart from './components'
+
 
 function App() {
   return (
@@ -17,7 +19,7 @@ function App() {
         </div>
 
         <div>
-          <Products/>
+          <Dashboard/>
         </div>
 
         <Footer absolute/>
