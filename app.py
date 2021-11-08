@@ -79,8 +79,6 @@ class Items(db.Model):
     item_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(80))
-    password = db.Column(db.String(80))
-    balance = db.Column(db.Integer)
     date = db.Column(db.Date, default=datetime.datetime.utcnow)
 
     def __repr__(self):
@@ -95,8 +93,8 @@ class BuyerItems(db.Model):
     Model for saved artists
     """
 
-    buyer_id = db.Column(db.Integer, primary_key=True)
-    item_id = db.Column(db.Integer)
+    item_id = db.Column(db.Integer, primary_key=True)
+    buyer_id = db.Column(db.Integer)
     username = db.Column(db.String(80), nullable=False)
 
     def __repr__(self):
@@ -111,8 +109,8 @@ class SellerItems(db.Model):
     Model for saved artists
     """
 
-    seller_id = db.Column(db.Integer, primary_key=True)
-    item_id = db.Column(db.Integer)
+    item_id = db.Column(db.Integer, primary_key=True)
+    seller_id = db.Column(db.Integer)
     username = db.Column(db.String(80), nullable=False)
 
     def __repr__(self):
