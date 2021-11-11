@@ -79,8 +79,8 @@ export default function SellerForm(props) {
            leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
          >
          <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-           <div className="md:grid md:grid-cols-3 md:gap-6">
-               <div className="mt-5 md:mt-0 md:col-span-2">
+           <div className="md:grid md:grid-cols-3 md:gap-10">
+               <div className="mt-5 md:mt-0 md:col-span-10">
  
                    {/* Temporary Debugging Item Mapping */}
  
