@@ -5,6 +5,7 @@ const formReducer = (state, event) => {
    if(event.reset){
        return {
            company_website: '',
+           price: 0,
            about: '',
  
        }
@@ -101,7 +102,7 @@ export default function SellerForm(props) {
                    <div className="shadow sm:rounded-md sm:overflow-hidden">
                    <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                    <div className="grid grid-cols-3 gap-6">
-                     <div className="col-span-3 md:col-span-2">
+                    <div className="col-span-3 md:col-span-2">
  
                        <label htmlFor="company_website" className="block text-md font-medium text-gray-700">
                          Item name
@@ -120,6 +121,25 @@ export default function SellerForm(props) {
                        </div>
                      </div>
                    </div>
+                  
+                   <div>
+                     <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+                       Item Price
+                     </label>
+ 
+                     <div className="mt-1">
+                       <input
+                         type="text"
+                         id="price"
+                         name="price"
+                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                         placeholder="Enter Fixed Price"
+                         onChange={handleChange}
+                         value={formData.price || ''}
+                       />
+                     </div>
+                   </div>
+                   
  
                    <div>
                      <label htmlFor="about" className="block text-sm font-medium text-gray-700">
