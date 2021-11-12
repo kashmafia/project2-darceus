@@ -1,8 +1,10 @@
 import '../App.css'
-import React from 'react'
+import React, {useState} from 'react'
+import SellerForm from './SellerForm';
 
 
 function Main () {
+    const [sellForm, setSellForm] = useState(false)
     return (
         <div>
         <main>
@@ -19,15 +21,17 @@ function Main () {
                     </p>
                     <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                     <div className="rounded-md shadow">
-                        <a
-                        href="/#"
+                        <button
+                        onClick={() => setSellForm(true)}
                         className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 md:py-4 md:text-lg md:px-10"
                         >
-                        Get started
-                        </a>
+                        Start selling
+                        </button>
                     </div>
                     </div>
                 </div>
+
+                <SellerForm trigger={sellForm} setTrigger={setSellForm}/>
             </div>
         </main>
         </div>
