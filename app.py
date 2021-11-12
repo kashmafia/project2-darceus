@@ -5,9 +5,9 @@ import bcrypt
 from dotenv import load_dotenv, find_dotenv
 import json
 import flask
+import stripe
 from flask import jsonify, render_template, redirect, flash, request
 from flask.helpers import url_for
-<<<<<<< HEAD
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import (
     login_user,
@@ -28,12 +28,10 @@ load_dotenv(find_dotenv())
 uri = os.getenv("DATABASE_URL")  # or other relevant config var
 if uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://", 1)
-=======
 
-import stripe
 
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
->>>>>>> 354ca04ff083709581b7eef0991bfa4bdd2b9040
+
 
 app = flask.Flask(__name__, static_folder="./build/static")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -148,6 +146,7 @@ def register():
         return redirect(url_for("login"))
 
     return flask.render_template("register.html", form=form)
+
 
 # Do not remove, Stripe handling api.
 # @app.route("/create-checkout-session", methods=["POST"])
