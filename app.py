@@ -6,7 +6,7 @@ from dotenv import load_dotenv, find_dotenv
 import json
 import flask
 
-# import stripe
+import stripe
 from flask import jsonify, render_template, redirect, flash, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import BYTEA
@@ -46,7 +46,7 @@ if uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://", 1)
 
 
-# stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
 
 app = flask.Flask(__name__, static_folder="./build/static")
