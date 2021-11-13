@@ -7,6 +7,21 @@ import json
 import flask
 import stripe
 from flask import jsonify, render_template, redirect, flash, request
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.dialects.postgresql import BYTEA
+from flask_login import (
+    login_user,
+    current_user,
+    LoginManager,
+    UserMixin,
+    login_required,
+)
+
+load_dotenv(find_dotenv())
+
+uri = os.getenv("DATABASE_URL")  # or other relevant config var
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
 from flask.helpers import url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import (

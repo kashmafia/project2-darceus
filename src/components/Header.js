@@ -12,6 +12,10 @@ import {
 import { DiPostgresql, DiPython, DiReact, DiHeroku } from 'react-icons/di'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 
+import React from 'react';
+import GoogleLogin from 'react-google-login';
+
+
 const solutions = [
   {
     name: 'Duc (Duketamin) Vu',
@@ -25,11 +29,12 @@ const solutions = [
     href: 'https://github.com/kashmafia',
     icon: CurrencyDollarIcon,
   },
-  { 
-    name: 'Derek (Big D) Yong', 
-    description: "Big D no cap", 
-    href: '#', 
-    icon:  LightningBoltIcon},
+  {
+    name: 'Derek (Big D) Yong',
+    description: "Big D no cap",
+    href: '#',
+    icon: LightningBoltIcon
+  },
   {
     name: 'Johnathan Choi',
     description: "Humble God",
@@ -57,16 +62,33 @@ const resources = [
     href: '#',
     icon: DiReact,
   },
-  { 
-    name: 'Heroku', 
-    description: 'Deploy', 
-    href: '#', 
-    icon: DiHeroku },
+  {
+    name: 'Heroku',
+    description: 'Deploy',
+    href: '#',
+    icon: DiHeroku
+  },
 ]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
+
+const handleLogin = async googleData => {
+  const res = await fetch("/api/v1/auth/google", {
+    method: "POST",
+    body: JSON.stringify({
+      token: googleData.tokenId
+    }),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+  const data = await res.json()
+  // store returned user somehow
+}
+
+
 
 function Header() {
   return (
@@ -198,6 +220,13 @@ function Header() {
             </Popover>
           </Popover.Group>
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+            <GoogleLogin
+              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+              buttonText="Log in with Google"
+              onSuccess={handleLogin}
+              onFailure={handleLogin}
+              cookiePolicy={'single_host_origin'}
+            />
             <a href="/#" className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
               Sign in
             </a>

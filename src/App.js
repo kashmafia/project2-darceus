@@ -39,18 +39,19 @@ function App() {
     }
   ]
 
+
   return (
     <>
-      <Header/>
+      <Header />
       <main>
         <section className="relative w-full h-full">
-        <div>
-          <Hero/>
-        </div>
-        <div>
-          <Dashboard item={products} absolute/>
-        </div>
-        <Footer absolute/>
+          <div>
+            <Hero />
+          </div>
+          <div>
+            <Dashboard item={products} absolute />
+          </div>
+          <Footer absolute />
         </section>
       </main>
     </>
