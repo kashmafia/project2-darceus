@@ -22,7 +22,7 @@ const formReducer = (state, event) => {
 export default function SellerForm(props) {
  
  const cancelButton = useRef(null)
- 
+//  const [product, updateProduct] = useState(args.artist_ids);
  const[formData, setFormData] = useReducer(formReducer, {});
  const [submitting, setSubmitting] = useState(false);
  
