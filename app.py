@@ -171,7 +171,26 @@ db.create_all()
 
 @bp.route("/")
 def home():
-    return render_template("home.html")
+
+    # check if current_user is anonymous
+    if current_user.is_anonymous:
+        return redirect("/signup")
+
+    # get user's favorite artists and update the list of Artist Name
+    buyer_id = current_user.buyer_id
+    user_name = current_user.email
+
+    # Get list of items for sales and list of item that current user are saving in their cart
+    list_item = Items.query.all()
+    user_cart = BuyerItems.query.filter_by(buyer_id).all()
+    
+    
+    data = json.dumps({
+        "list_item": list_item,
+        "user_cart": user_cart,
+        "user_name": user_name
+    })
+    return render_template("index.html", data=data,)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -192,7 +211,9 @@ def login():
 
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
-    return render_template("dashboard.html")
+    list_item = Items.query.limit(40).all()
+    data = json.dumps({"list_item": list_item})
+    return render_template("index.html", data=data,)
 
 
 @app.route("/logout", methods=["GET", "POST"])
@@ -244,4 +265,3 @@ def create_checkout_session():
 
 
 app.run(host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", 8081)), debug=True)
-
