@@ -7,5 +7,6 @@ Flask-SQLAlchemy==2.1
 urllib3==1.26.6
 psycopg2-binary==2.9.1
 stripe
+bcrypt
 Flask-wtf
 flask-bcrypt
