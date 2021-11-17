@@ -191,7 +191,7 @@ def login():
                 login_user(user)
                 USER = form.username.data
                 # return dashboard(form.username.data)
-                return redirect(url_for("dashboard"))
+                return redirect(url_for("home"))
     return flask.render_template("login.html", form=form,)
 
 
