@@ -227,15 +227,10 @@ function Header() {
               onFailure={handleLogin}
               cookiePolicy={'single_host_origin'}
             />
-            <a href="/#" className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
-              Sign in
-            </a>
-            <a
-              href="/#"
-              className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-            >
-              Sign up
-            </a>
+            <a></a>
+            <form method="POST" action="/logout">
+              <button className="btn ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700" >Log Out</button>
+            </form>
           </div>
         </div>
       </div>

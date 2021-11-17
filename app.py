@@ -163,18 +163,19 @@ def home():
 
     # check if current_user is anonymous
     if current_user.is_anonymous:
-        return redirect("/signup")
+        return redirect("/login")
 
     # get user's favorite artists and update the list of Artist Name
-    buyer_id = current_user.buyer_id
-    user_name = current_user.email
+    # buyer_id = current_user.buyer_id
+    # user_name = current_user.email
 
     # Get list of items for sales and list of item that current user are saving in their cart
-    list_item = Items.query.all()
-    user_cart = BuyerItems.query.filter_by(buyer_id).all()
+    # list_item = Items.query.all()
+    # user_cart = BuyerItems.query.filter_by(buyer_id).all()
 
     data = json.dumps(
-        {"list_item": list_item, "user_cart": user_cart, "user_name": user_name}
+        {}
+        # {"list_item": list_item, "user_cart": user_cart, "user_name": user_name}
     )
     return render_template("index.html", data=data,)
 
@@ -191,7 +192,7 @@ def login():
                 login_user(user)
                 USER = form.username.data
                 # return dashboard(form.username.data)
-                return redirect(url_for("home"))
+                return redirect(url_for("bp.home"))
     return flask.render_template("login.html", form=form,)
 
 
