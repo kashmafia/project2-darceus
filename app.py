@@ -43,21 +43,26 @@ bp = flask.Blueprint("bp", __name__, template_folder="./build")
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
+login_manager = LoginManager()
+login_manager.login_view = "login"
+login_manager.init_app(app)
 
-class Person(UserMixin, db.Model):
-    """
-    Model for a) User rows in the DB and b) Flask Login object
-    """
 
-    buyer_id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(80))
-    password = db.Column(db.String(80))
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(250), nullable=False, unique=True)
+    password = db.Column(db.String(250), nullable=False)
 
     def __repr__(self):
         """
         Determines what happens when we print an instance of the class
         """
-        return f"<Buyer {self.buyer_id}>"
+        return f"<Buyer {self.id}>"
 
     def get_username(self):
         """
@@ -116,22 +121,6 @@ class SellerItems(db.Model):
         return f"<Buyer {self.buyer_id}>"
 
 
-login_manager = LoginManager()
-login_manager.login_view = "login"
-login_manager.init_app(app)
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(250), nullable=False, unique=True)
-    password = db.Column(db.String(250), nullable=False)
-
-
 class RegisterForm(FlaskForm):
     username = StringField(
         validators=[InputRequired(), Length(min=4, max=250)],
@@ -183,13 +172,10 @@ def home():
     # Get list of items for sales and list of item that current user are saving in their cart
     list_item = Items.query.all()
     user_cart = BuyerItems.query.filter_by(buyer_id).all()
-    
-    
-    data = json.dumps({
-        "list_item": list_item,
-        "user_cart": user_cart,
-        "user_name": user_name
-    })
+
+    data = json.dumps(
+        {"list_item": list_item, "user_cart": user_cart, "user_name": user_name}
+    )
     return render_template("index.html", data=data,)
 
 
@@ -211,9 +197,7 @@ def login():
 
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
-    list_item = Items.query.limit(40).all()
-    data = json.dumps({"list_item": list_item})
-    return render_template("index.html", data=data,)
+    return render_template("index.html")
 
 
 @app.route("/logout", methods=["GET", "POST"])
