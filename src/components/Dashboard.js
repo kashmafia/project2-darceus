@@ -4,11 +4,11 @@ import Cart from './Cart';
 function Dashboard ({item, products, setCart}) {
     const [showItem, setShowItem] = useState(false)
     
-
     const addItem = (newItem) => {
         console.log(newItem);
         const newCart = [...item, newItem];
         setCart(newCart);
+        //TODO: update BuyerItems
         setShowItem(item => !item);
     }
     
@@ -19,9 +19,9 @@ function Dashboard ({item, products, setCart}) {
                 <h2 className="sr-only">Products</h2>
 
                 <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-                {products.map((product, id) => (
+                {products.map((product) => (
                         <>
-                        <a key={id} href='/#' className="group">
+                        <a key={product.id} href='/#' className="group">
                             <div className="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
                                 <img
                                 src={product.image}
@@ -32,10 +32,9 @@ function Dashboard ({item, products, setCart}) {
                             <h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
                             <div className="flex">
                                 <p className="flex-auto mt-1 text-lg font-medium text-gray-900">${product.price} </p>
-                                <button value={product} 
-                                        class="w-1/4 flex-auto bg-transparent hover:text-indigo-600 items-center justify-center rounded-md border border-gray-300" 
+                                <button class="w-1/4 flex-auto bg-transparent hover:text-indigo-600 items-center justify-center rounded-md border border-gray-300" 
                                         type="button" 
-                                        onClick={(e) => addItem(e.target.value)}>Add to bag</button>
+                                        onClick={() => addItem(product)}>Add to bag</button>
                             </div>
                         </a>
                         
@@ -46,7 +45,7 @@ function Dashboard ({item, products, setCart}) {
         </div>
         
 
-        <Cart item={item} open={showItem} setOpen={setShowItem}/>
+        <Cart item={item} open={showItem} setOpen={setShowItem} setCart={setCart}/>
         </>
     );
 }

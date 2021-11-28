@@ -1,10 +1,28 @@
-import { Fragment } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 
-export default function Cart({item, open, setOpen}) {
-  const products = item;
-  console.log(products);
+export default function Cart({item, open, setOpen, setCart}) {
+  const [cartTotal, setCartTotal] = useState(0);
+  const removeItem = (removeProduct) => {
+    let hardCopy = item;
+    hardCopy = hardCopy.filter(product => product !== removeProduct);
+    setCart(hardCopy);
+    //TODO: Remove button (update Buyer Item table)
+  }
+
+  //TODO: Subtotal
+  useEffect(() => {
+    total();
+  }, [item]);
+
+  const total = () => {
+    let totalVal = 0;
+    for (let i = 0; i < item.length; i++) {
+      totalVal += item[i].price;
+    }
+    setCartTotal(totalVal);
+  };
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -52,7 +70,7 @@ export default function Cart({item, open, setOpen}) {
                     <div className="mt-8">
                       <div className="flow-root">
                         <ul className="-my-6 divide-y divide-gray-200">
-                          {products.map((product, idx) => (
+                          {item.map((product, idx) => (
                             <li key={idx} className="py-6 flex">
                               <div className="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
                                 <img
@@ -72,10 +90,12 @@ export default function Cart({item, open, setOpen}) {
                                   </div>
                                 </div>
                                 <div className="flex-1 flex items-end justify-between text-sm">
-                                  {/* <p className="text-gray-500">Qty {product.quantity}</p> */}
+                                  <p className="text-gray-500">Qty {product.quantity}</p>
 
                                   <div className="flex">
-                                    <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500">
+                                    <button type="button" 
+                                            className="font-medium text-indigo-600 hover:text-indigo-500"
+                                            onClick={() => removeItem(product)}>
                                       Remove
                                     </button>
                                   </div>
@@ -91,7 +111,7 @@ export default function Cart({item, open, setOpen}) {
                   <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                     <div className="flex justify-between text-base font-medium text-gray-900">
                       <p>Subtotal</p>
-                      <p>$262.00</p>
+                      <p>${cartTotal}</p>
                     </div>
                     <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                     <div className="mt-6">
