@@ -20,24 +20,41 @@ const formReducer = (state, event) => {
  
  
 export default function SellerForm(props) {
- 
+
+ const form = useRef(null);
  const cancelButton = useRef(null)
 //  const [product, updateProduct] = useState(args.artist_ids);
  const[formData, setFormData] = useReducer(formReducer, {});
- const [submitting, setSubmitting] = useState(false);
+//  const [submitting, setSubmitting] = useState(false);
  
  // Creating a submit variable indicating that the item is listed
- const successfulSubmit = event => {
-     event.preventDefault();
-     setSubmitting(true);
+//  const successfulSubmit = event => {
+//      event.preventDefault();
+//      setSubmitting(true);
  
-     setTimeout(() => {
-         setSubmitting(false);
-         setFormData({
-             reset: true
-         })
-     }, 3000)
- }
+//      setTimeout(() => {
+//          setSubmitting(false);
+//          setFormData({
+//              reset: true
+//          })
+//      }, 3000)
+//  }
+
+// saving form data to database
+function onClickSave() {
+  const requestData = { artist_ids: artists };
+  fetch('/save', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(requestData),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      updateProdduct(data.artist_ids);
+    });
+}
  
  // Displaying form data on page
  const handleChange = event => {
@@ -84,7 +101,7 @@ export default function SellerForm(props) {
  
                    {/* Temporary Debugging Item Mapping */}
  
-                   {submitting &&
+                   {/* {submitting &&
                    <div>
                        You are listing the following:
                        <ul>
@@ -94,7 +111,7 @@ export default function SellerForm(props) {
                        </ul>
                   
                    </div>
-                   }
+                   } */}
  
  
                  <form action="#" method="POST" onSubmit={successfulSubmit}>
@@ -200,6 +217,7 @@ export default function SellerForm(props) {
                    <button
                      type="submit"
                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                     onClick = {onClickSave}
                    >
                      Save
                    </button>
