@@ -22,8 +22,13 @@ const formReducer = (state, event) => {
 export default function SellerForm(props) {
 
  const form = useRef(null);
- const cancelButton = useRef(null)
- const [product, setProduct] = useState(0);
+ const cancelButton = useRef(null);
+
+ const [productName, setProductName] = useState('');
+ const [productPrice, setProductPrice] = useState('');
+ const [productAbout, setProductAbout] = useState('');
+
+
  const[formData, setFormData] = useReducer(formReducer, {});
 //  const [submitting, setSubmitting] = useState(false);
  
@@ -42,8 +47,8 @@ export default function SellerForm(props) {
 
 // saving form data to database
 function onClickSave() {
-  const requestData = { artist_ids: artists };
-  fetch('/save', {
+  const requestData = { company_website: productName, price: productPrice, about: productAbout};
+  fetch('/save_product', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -52,7 +57,9 @@ function onClickSave() {
   })
     .then((response) => response.json())
     .then((data) => {
-      updateProdduct(data.artist_ids);
+      setProductName(data.company_website);
+      setProductPrice(data.price);
+      setProductAbout(data.about);
     });
 }
  
@@ -60,7 +67,7 @@ function onClickSave() {
  const handleChange = event => {
      setFormData({
          name: event.target.name,
-         value:event.target.value,
+         value: event.target.value,
      });
  }
  
@@ -114,7 +121,7 @@ function onClickSave() {
                    } */}
  
  
-                 <form action="#" method="POST" onSubmit={successfulSubmit}>
+                 <form action="#" method="POST" onSubmit={onClickSave}>
                    <fieldset disabled={submitting}>
                    <div className="shadow sm:rounded-md sm:overflow-hidden">
                    <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
@@ -217,7 +224,6 @@ function onClickSave() {
                    <button
                      type="submit"
                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                     onClick = {onClickSave}
                    >
                      Save
                    </button>
