@@ -64,12 +64,12 @@ function onClickSave() {
 }
  
  // Displaying form data on page
- const handleChange = event => {
-     setFormData({
-         name: event.target.name,
-         value: event.target.value,
-     });
- }
+//  const handleChange = event => {
+//      setFormData({
+//          name: event.target.name,
+//          value: event.target.value,
+//      });
+//  }
  
    return (props.trigger) ? (
        <>
@@ -122,7 +122,7 @@ function onClickSave() {
  
  
                  <form action="#" method="POST" onSubmit={onClickSave}>
-                   <fieldset disabled={submitting}>
+                   <fieldset>
                    <div className="shadow sm:rounded-md sm:overflow-hidden">
                    <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                    <div className="grid grid-cols-3 gap-6">
@@ -139,8 +139,8 @@ function onClickSave() {
                            id="company_website"
                            className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
                            placeholder="Item's name"
-                           onChange={handleChange}
-                           value={formData.company_website || ''}
+                           onChange={(e)=> setProductName(e.target.value)}
+                           
                          />
                        </div>
                      </div>
@@ -158,8 +158,8 @@ function onClickSave() {
                          name="price"
                          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                          placeholder="Enter Fixed Price"
-                         onChange={handleChange}
-                         value={formData.price || ''}
+                         onChange={(e)=> setProductPrice(e.target.value)}
+                         
                        />
                      </div>
                    </div>
@@ -178,8 +178,8 @@ function onClickSave() {
                          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                          placeholder="An item"
                          defaultValue={''}
-                         onChange={handleChange}
-                         value={formData.about || ''}
+                         onChange={(e)=> setProductAbout(e.target.value)}
+                         
                        />
                      </div>
                      <p className="mt-2 text-sm text-gray-500">

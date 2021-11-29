@@ -244,6 +244,7 @@ def save_product():
 
 
     response = {"company_website": item_name, "price": item_price, "about": item_about}
+    flash.alert("Item has been submitted!")
     return flask.jsonify(response)
 
 
