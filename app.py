@@ -234,17 +234,16 @@ def save_product():
     item_name = flask.request.json.get("company_website")
     item_price = flask.request.json.get("price")
     item_about = flask.request.json.get("about")
+    item_image = flask.request.json.get("file_upload")
 
 
     username = current_user.username
-    db.session.add(Items(item_name=item_name, username=username))
-    db.session.add(Items(price=item_price, username=username))
-    db.session.add(Items(item_description=item_about, username=username))
+    new_item = Items(item_name=item_name, price=item_price, item_description=item_about, item_pic= item_image, username=username)
+    db.session.add(new_item)
     db.session.commit()
 
 
     response = {"company_website": item_name, "price": item_price, "about": item_about}
-    flash.alert("Item has been submitted!")
     return flask.jsonify(response)
 
 

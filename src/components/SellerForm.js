@@ -1,35 +1,35 @@
-import React, {Fragment, useRef, useReducer, useState} from 'react'
+import React, {Fragment, useRef, useState} from 'react'
 import { Dialog, Transition } from '@headlessui/react';
- 
-const formReducer = (state, event) => {
-   if(event.reset){
-       return {
-           company_website: '',
-           price: 0,
-           about: '',
- 
-       }
-      
-   }
-   return {
-       ...state,
-       [event.name]: event.value
-   }
- 
-}
- 
+
  
 export default function SellerForm(props) {
 
- const form = useRef(null);
  const cancelButton = useRef(null);
 
- const [productName, setProductName] = useState('');
- const [productPrice, setProductPrice] = useState('');
- const [productAbout, setProductAbout] = useState('');
+//  const [productName, setProductName] = useState('');
+//  const [productPrice, setProductPrice] = useState('');
+//  const [productAbout, setProductAbout] = useState('');
 
 
- const[formData, setFormData] = useReducer(formReducer, {});
+ const [product, setProduct] = useState({
+   company_website: '',
+   price: '',
+   about: '',
+   file_upload: '',
+
+ });
+
+ let name, value;
+ const handleInputs = (e) => {
+   name = e.target.name;
+   value = e.target.value;
+
+   setProduct({... product, [name]:value});
+
+ };
+
+
+//  const[formData, setFormData] = useReducer(formReducer, {});
 //  const [submitting, setSubmitting] = useState(false);
  
  // Creating a submit variable indicating that the item is listed
@@ -47,7 +47,13 @@ export default function SellerForm(props) {
 
 // saving form data to database
 function onClickSave() {
-  const requestData = { company_website: productName, price: productPrice, about: productAbout};
+  const requestData = { 
+    company_website: product.company_website, 
+    price: product.price, 
+    about: product.about,
+    file_upload: product.file_upload,
+  };
+
   fetch('/save_product', {
     method: 'POST',
     headers: {
@@ -57,9 +63,10 @@ function onClickSave() {
   })
     .then((response) => response.json())
     .then((data) => {
-      setProductName(data.company_website);
-      setProductPrice(data.price);
-      setProductAbout(data.about);
+      console.log(data);
+
+      setProduct(data);
+
     });
 }
  
@@ -121,7 +128,7 @@ function onClickSave() {
                    } */}
  
  
-                 <form action="#" method="POST" onSubmit={onClickSave}>
+                 <form method="POST" onSubmit={onClickSave}>
                    <fieldset>
                    <div className="shadow sm:rounded-md sm:overflow-hidden">
                    <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
@@ -139,7 +146,9 @@ function onClickSave() {
                            id="company_website"
                            className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
                            placeholder="Item's name"
-                           onChange={(e)=> setProductName(e.target.value)}
+                          //  onChange={(e)=> setProductName(e.target.value)}
+                          onChange={handleInputs}
+                          value={product.company_website}
                            
                          />
                        </div>
@@ -158,7 +167,9 @@ function onClickSave() {
                          name="price"
                          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                          placeholder="Enter Fixed Price"
-                         onChange={(e)=> setProductPrice(e.target.value)}
+                        //  onChange={(e)=> setProductPrice(e.target.value)}
+                        onChange={handleInputs}
+                        value={product.price}
                          
                        />
                      </div>
@@ -178,7 +189,9 @@ function onClickSave() {
                          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                          placeholder="An item"
                          defaultValue={''}
-                         onChange={(e)=> setProductAbout(e.target.value)}
+                        //  onChange={(e)=> setProductAbout(e.target.value)}
+                        onChange={handleInputs}
+                        value={product.about}
                          
                        />
                      </div>
@@ -207,11 +220,18 @@ function onClickSave() {
                          </svg>
                          <div className="flex text-sm text-gray-600">
                            <label
-                             htmlFor="file-upload"
+                             htmlFor="file_upload"
                              className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                            >
                              <span>Upload a file</span>
-                             <input id="file-upload" name="file-upload" type="file" className="sr-only" />
+                             <input 
+                              id="file_upload" 
+                              name="file_upload" 
+                              type="file" 
+                              className="sr-only" 
+                              onChange={handleInputs}
+                              value={product.file_upload}
+                              />
                            </label>
                            <p className="pl-1">or drag and drop</p>
                          </div>
