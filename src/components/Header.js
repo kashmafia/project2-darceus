@@ -12,7 +12,7 @@ import {
 import { DiPostgresql, DiPython, DiReact, DiHeroku } from 'react-icons/di'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 
-import React from 'react';
+import React, {useState} from 'react';
 
 
 const solutions = [
@@ -76,6 +76,11 @@ function classNames(...classes) {
 
 
 function Header() {
+  const [state, setState] = useState(false)
+
+  const handleButton = (bool) => {
+
+  }
   return (
     <Popover className="relative bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -204,6 +209,13 @@ function Header() {
               )}
             </Popover>
           </Popover.Group>
+
+          <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+            <a></a>
+              <button className="btn ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700" 
+                >Shopping Cart</button>
+          </div>
+
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
             <a></a>
             <form method="POST" action="/logout">
