@@ -1,47 +1,47 @@
-# import unittest
-# import sys
-# import os
+import unittest
+import sys
+import json
+import os
+from flask.helpers import url_for
+from flask_login import current_user
 
-# # getting the name of the directory
-# # where the this file is present.
-# current = os.path.dirname(os.path.realpath(__file__))
+# getting the name of the directory
+# where the this file is present.
+current = os.path.dirname(os.path.realpath(__file__))
 
-# # Getting the parent directory name
-# # where the current directory is present.
-# parent = os.path.dirname(current)
+# Getting the parent directory name
+# where the current directory is present.
+parent = os.path.dirname(current)
 
-# # adding the parent directory to
-# # the sys.path.
-# sys.path.append(parent)
+# adding the parent directory to
+# the sys.path.
+sys.path.append(parent)
 
-# INPUT = "INPUT"
-# EXPECTED_OUTPUT = "EXPECTED_OUTPUT"
+from app import app, db, User, login, logout
+
+uri = os.getenv("DATABASE_URL")  # or other relevant config var
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
 
 
-# class GetSongDataTests(unittest.TestCase):
-#     def setUp(self):
-#         self.success_test_params = [
-#             {INPUT: {}, EXPECTED_OUTPUT: (None, None, None, None),},
-#             {
-#                 INPUT: {"name": "Song Name"},
-#                 EXPECTED_OUTPUT: ("Song Name", None, None, None),
-#             },
-#             {
-#                 INPUT: {
-#                     "name": "Song Name",
-#                     "artists": [{"name": "Artist"}],
-#                     "album": {"images": [{"url": "image_url"}]},
-#                     "preview_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-#                 },
-#                 EXPECTED_OUTPUT: (
-#                     "Song Name",
-#                     "Artist",
-#                     "image_url",
-#                     "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-#                 ),
-#             },
-#         ]
+class GetLoginDataTests(unittest.TestCase):
+    def setUp(self):
+        app.config["TESTING"] = True
+        app.config["WTF_CSRF_ENABLED"] = False
+        app.config["DEBUG"] = False
+        app.config["SQLALCHEMY_DATABASE_URI"] = uri
+        self.app = app.test_client()
+        db.drop_all()
+        db.create_all()
 
-#     def test_extract_song_data(self):
-#         for test in self.success_test_params:
-#             self.assertEqual(extract_song_data(test[INPUT]), test[EXPECTED_OUTPUT])
+    def test_login(self):
+        response = self.app.get("/login", follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_logout(self):
+        response = self.app.get("/logout", follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+
+
+if __name__ == "__main__":
+    unittest.main()
