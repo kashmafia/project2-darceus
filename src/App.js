@@ -45,7 +45,7 @@ function App() {
             <Hero />
           </div>
           <div>
-            <Dashboard products={products} item={cart} setCart={setCart} absolute />
+            <Dashboard products={products} item={cart} setCart={setCart} absolute setProduct={setProduct}/>
           </div>
           <Footer absolute />
         </section>
