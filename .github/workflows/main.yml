@@ -4,9 +4,9 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -19,7 +19,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [15.x]
+        node-version: [16.x]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -45,12 +45,15 @@ jobs:
       # Runs unmock tests
       # - name: Run unmock tests server side
       #   run: python3 test_unmock.py
-      
+
       # Runs mock tests
       # - name: Run mock tests server side
       #   run: python3 test_mock_apis.py
 
       - run: npm ci
       - run: npm run build --if-present
-      - run: npm test
+      # - run: npm test
+      #   env:
+      #     STRIPE_SECRET_KEY: ${{secrets.SRIPE_SECRET_KEY}}
+      #     DATABASE_URL: ${{secrets.DATABASE_URL}}
       - run: npx eslint src/
