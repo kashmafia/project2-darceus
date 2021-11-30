@@ -111,6 +111,7 @@ class SellerItems(db.Model):
     """
     Model for saved artists
     """
+
     id = db.Column(db.Integer, primary_key=True)
     item_id = db.Column(db.Integer)
     seller_id = db.Column(db.Integer)
@@ -119,7 +120,7 @@ class SellerItems(db.Model):
         """
         Determines what happens when we print an instance of the class
         """
-        return f"<Buyer {self.buyer_id}>"
+        return f"<Buyer {self.seller_id}>"
 
 
 class RegisterForm(FlaskForm):
@@ -167,20 +168,38 @@ def home():
         return redirect("/login")
 
     # get user's favorite artists and update the list of Artist Name
-    # buyer_id = current_user.buyer_id
-    # user_name = current_user.email
+    username = current_user.username
+    user_id = User.query.filter_by(username=username).first().id
+    print(username, user_id)
 
     # Get list of items for sales and list of item that current user are saving in their cart
-    # list_item = Items.query.all()
-    # user_cart = BuyerItems.query.filter_by(buyer_id).all()
+    list_item = Items.query.all()
+    user_cart = BuyerItems.query.filter_by(buyer_id=user_id).all()
 
-    data = json.dumps(
-        {
+    # make a dictionary of user cart for faster look up
+    item_in_cart = {}
+    for item in user_cart:
+        item_in_cart[item.item_id] = item.buyer_id
 
+    # Query list_item and send all item to client side
+    products = []
+    cart = []
+    for item in list_item:
+        # serialize item into dict and save it to products
+        product = {}
+        product["id"] = item.id
+        product["description"] = item.item_description
+        product["name"] = item.item_name
+        product["seller"] = item.username
+        product["image"] = item.item_pic
+        product["price"] = item.price
+        products.append(product)
 
-        }
-        # {"list_item": list_item, "user_cart": user_cart, "user_name": user_name}
-    )
+        # if item's id is in user's cart, add product to their cart
+        if item.id in item_in_cart:
+            cart.append(product)
+
+    data = json.dumps({"list_item": products, "user_cart": cart, "user_name": username})
     return render_template("index.html", data=data,)
 
 
@@ -230,6 +249,7 @@ def register():
 
 app.register_blueprint(bp)
 
+
 @app.route("/save_product", methods=["POST"])
 def save_product():
     item_name = flask.request.json.get("company_website")
@@ -237,22 +257,26 @@ def save_product():
     item_about = flask.request.json.get("about")
     item_image = flask.request.json.get("file_upload")
 
-
     username = current_user.username
 
     print(item_name)
     print(item_price)
     print(item_about)
     print(username)
-    
-    new_item = Items(item_name=item_name, price=item_price, item_description=item_about, username=username) # item_pic needs to be added back when kash db is working
+
+    new_item = Items(
+        item_name=item_name,
+        price=item_price,
+        item_description=item_about,
+        username=username,
+    )  # item_pic needs to be added back when kash db is working
     db.session.add(new_item)
     db.session.commit()
-
 
     # response = {"company_website": item_name, "price": item_price, "about": item_about}
     # return flask.jsonify(response)
     return jsonify({"message": "Add items success"})
+
 
 # Do not remove, Stripe handling api.
 @app.route("/create-checkout-session", methods=["POST"])
