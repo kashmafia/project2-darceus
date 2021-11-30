@@ -5,7 +5,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
     <style>
+        body {
+            background: url(https://img.wallpapersafari.com/desktop/1920/1080/68/40/VLymDo.jpg);
+            background-size: 100%;
+            padding: 25px;
+        }
+
         .grandParentContainer {
             display: table;
             height: 100%;
@@ -18,13 +26,18 @@
         }
 
         .loginContainer {
-            padding-left: 100px;
+            font-family: Fantasy;
+            font-size: larger;
         }
 
         .linkContainer {
-            padding-left: 80px;
+            padding: 25px;
+            padding-left: 100px;
+            padding-top: 25px;
         }
     </style>
+
+
     <title>Login</title>
 </head>
 
@@ -32,11 +45,11 @@
     <div class="grandParentContainer">
         <div class="parentContainer">
             <div class="loginContainer">
-                <h1>Login Page</h1>
+                <h1>Welcome to the Login Page</h1>
             </div>
 
 
-            <form method="POST" action="">
+            <form class="form" method="POST" action="">
                 {{ form.hidden_tag() }}
                 {{ form.username }}
                 {{ form.password }}

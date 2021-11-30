@@ -5,7 +5,7 @@ from dotenv import load_dotenv, find_dotenv
 import json
 import flask
 
-import stripe
+# import stripe
 from flask import jsonify, render_template, redirect, flash, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import BYTEA
@@ -31,7 +31,7 @@ if uri.startswith("postgres://"):
 from flask.helpers import url_for
 
 
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+# stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
 app = flask.Flask(__name__, static_folder="./build/static")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -177,7 +177,10 @@ def home():
         {}
         # {"list_item": list_item, "user_cart": user_cart, "user_name": user_name}
     )
-    return render_template("index.html", data=data,)
+    return render_template(
+        "index.html",
+        data=data,
+    )
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -193,7 +196,10 @@ def login():
                 USER = form.username.data
                 # return dashboard(form.username.data)
                 return redirect(url_for("bp.home"))
-    return flask.render_template("login.html", form=form,)
+    return flask.render_template(
+        "login.html",
+        form=form,
+    )
 
 
 @app.route("/dashboard", methods=["GET", "POST"])
@@ -238,7 +244,9 @@ def create_checkout_session():
                     "quantity": 1,
                 },
             ],
-            payment_method_types=["card",],
+            payment_method_types=[
+                "card",
+            ],
             mode="payment",
             success_url=request.base_url + "/success.html",
             cancel_url=url_for("home", _external=True),

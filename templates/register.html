@@ -6,6 +6,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        .body {
+            background: url(https://img.wallpapersafari.com/desktop/1920/1080/68/40/VLymDo.jpg);
+            background-size: 100%;
+        }
+
+        .form {
+            font-family: sans-serif;
+            font-size: 16px;
+        }
+
+        .form * {
+            box-sizing: border-box;
+            line-height: 1.5;
+        }
+
+        .form__title {
+            font-size: 2em;
+            font-weight: 600;
+        }
+
         .grandParentContainer {
             display: table;
             height: 100%;
@@ -19,6 +39,8 @@
 
         .loginContainer {
             padding-left: 100px;
+            font-family: Fantasy;
+            font-size: larger;
         }
 
         .linkContainer {
@@ -35,7 +57,11 @@
                 <h1>Signup Page</h1>
             </div>
 
-            <form method="POST" action="">
+            <form class="form" method="POST" action="">
+                <div class="form__title">Sign up</div>
+                <p class="form__desc">
+                    text.
+                </p>
                 {{ form.hidden_tag() }}
                 {{ form.username }}
                 {{ form.password }}
