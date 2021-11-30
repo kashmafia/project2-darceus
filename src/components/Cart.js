@@ -13,16 +13,18 @@ export default function Cart({item, open, setOpen, setCart}) {
 
   //TODO: Subtotal
   useEffect(() => {
+    const total = () => {
+      let totalVal = 0;
+      for (let i = 0; i < item.length; i++) {
+        totalVal += item[i].price;
+      }
+      setCartTotal(totalVal);
+    };
+    
     total();
   }, [item]);
 
-  const total = () => {
-    let totalVal = 0;
-    for (let i = 0; i < item.length; i++) {
-      totalVal += item[i].price;
-    }
-    setCartTotal(totalVal);
-  };
+  
 
   return (
     <Transition.Root show={open} as={Fragment}>

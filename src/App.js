@@ -9,11 +9,12 @@ import Footer from './components/Footer';
 
 function App() {
 
-  // const args = JSON.parse(document.getElementById("data").text);
-  // const real_product = args.list_item;
-  // console.log(real_product);
+  const args = JSON.parse(document.getElementById("data").text);
+  const [products, setProduct] = useState(args.list_item);
+  const cart_item = args.cart;
+  console.log(cart_item);
 
-  // const [cart, setCart] = useState(args.user_cart);
+  // const [cart, setCart] = useState(args.cart);
   const [cart, setCart] = useState([
     {
       id: 1,
@@ -33,24 +34,6 @@ function App() {
   ]);
 
   
-  
-  const products = [{
-    id: 1,
-    price: 1000.00,
-    name: 'Ergonomic chair',
-    description: 'fancy chair, like new',
-    image: chair,
-    quantity: 10,
-  },
-  {
-    id: 2,
-    price: 1000.00,
-    name: 'Another Ergonomic chair',
-    description: 'fancy chair, like new',
-    image: chair,
-    quantity: 10,
-  },
-];
 
 
   return (
@@ -62,7 +45,7 @@ function App() {
             <Hero />
           </div>
           <div>
-            <Dashboard products={products} item={cart} setCart={setCart} absolute />
+            <Dashboard products={products} item={cart} setCart={setCart} absolute setProduct={setProduct}/>
           </div>
           <Footer absolute />
         </section>

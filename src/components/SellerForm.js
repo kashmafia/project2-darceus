@@ -24,7 +24,7 @@ export default function SellerForm(props) {
    name = e.target.name;
    value = e.target.value;
 
-   setProduct({... product, [name]:value});
+   setProduct({...product, [name]:value});
 
  };
 
