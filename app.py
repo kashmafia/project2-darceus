@@ -76,19 +76,19 @@ class Items(db.Model):
     Model for saved items
     """
 
-    item_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     item_description = db.Column(db.String(640))
     item_name = db.Column(db.String(60))
-    email = db.Column(db.String(120))
+    username = db.Column(db.String(120))
     item_pic = db.Column(BYTEA)
     date = db.Column(db.Date, default=datetime.datetime.utcnow)
-    price = db.Column(db.Float, primary_key=True)
+    price = db.Column(db.Float)
 
     def __repr__(self):
         """
         Determines what happens when we print an instance of the class
         """
-        return f"<Item {self.item_id}>"
+        return f"<Item {self.id}>"
 
 
 class BuyerItems(db.Model):
@@ -96,7 +96,8 @@ class BuyerItems(db.Model):
     Model for saved artists
     """
 
-    item_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer)
     buyer_id = db.Column(db.Integer)
 
     def __repr__(self):
@@ -110,8 +111,8 @@ class SellerItems(db.Model):
     """
     Model for saved artists
     """
-
-    item_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer)
     seller_id = db.Column(db.Integer)
 
     def __repr__(self):
@@ -238,14 +239,20 @@ def save_product():
 
 
     username = current_user.username
-    new_item = Items(item_name=item_name, price=item_price, item_description=item_about, item_pic= item_image, username=username)
+
+    print(item_name)
+    print(item_price)
+    print(item_about)
+    print(username)
+    
+    new_item = Items(item_name=item_name, price=item_price, item_description=item_about, username=username) # item_pic needs to be added back when kash db is working
     db.session.add(new_item)
     db.session.commit()
 
 
-    response = {"company_website": item_name, "price": item_price, "about": item_about}
-    return flask.jsonify(response)
-
+    # response = {"company_website": item_name, "price": item_price, "about": item_about}
+    # return flask.jsonify(response)
+    return jsonify({"message": "Add items success"})
 
 # Do not remove, Stripe handling api.
 @app.route("/create-checkout-session", methods=["POST"])
