@@ -8,5 +8,6 @@
         "--disable=C0114",
         "--disable=C0115",
         "--disable=C0116",
+        "--disable=E1101",
     ]
 }

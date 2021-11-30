@@ -1,10 +1,15 @@
+"""Server Code"""
+
 import os
 import datetime
-from dotenv import load_dotenv, find_dotenv
 import json
+import bcrypt
+from dotenv import load_dotenv, find_dotenv
 import flask
+
 import stripe
 from flask import jsonify, render_template, redirect, flash, request
+from flask.helpers import url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import BYTEA
 from flask_login import (
@@ -13,14 +18,19 @@ from flask_login import (
     LoginManager,
     UserMixin,
     login_required,
+    logout_user,
 )
+
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import InputRequired, Length, ValidationError
+from flask_bcrypt import Bcrypt
 
 load_dotenv(find_dotenv())
 
 uri = os.getenv("DATABASE_URL")  # or other relevant config var
 if uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://", 1)
-from flask.helpers import url_for
 
 
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
@@ -29,26 +39,35 @@ app = flask.Flask(__name__, static_folder="./build/static")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 app.config["SQLALCHEMY_DATABASE_URI"] = uri
+app.config["SECRET_KEY"] = b"\x03q\xd5=\x0c\x1e]/"
 
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
-
 db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
+
+login_manager = LoginManager()
+login_manager.login_view = "login"
+login_manager.init_app(app)
 
 
-class Person(UserMixin, db.Model):
-    """
-    Model for a) User rows in the DB and b) Flask Login object
-    """
+@login_manager.user_loader
+def load_user(user_id):
+    """Get User Id"""
+    return User.query.get(int(user_id))
 
-    buyer_id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(80))
-    password = db.Column(db.String(80))
+
+class User(db.Model, UserMixin):
+    """User Class"""
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(250), nullable=False, unique=True)
+    password = db.Column(db.String(250), nullable=False)
 
     def __repr__(self):
         """
         Determines what happens when we print an instance of the class
         """
-        return f"<Buyer {self.buyer_id}>"
+        return f"<Buyer {self.id}>"
 
     def get_username(self):
         """
@@ -76,6 +95,12 @@ class Items(db.Model):
         """
         return f"<Item {self.item_id}>"
 
+    def get_item_id(self):
+        """
+        Getter for username attribute
+        """
+        return self.item_id
+
 
 class BuyerItems(db.Model):
     """
@@ -90,6 +115,12 @@ class BuyerItems(db.Model):
         Determines what happens when we print an instance of the class
         """
         return f"<Buyer {self.buyer_id}>"
+
+    def get_buyer_id(self):
+        """
+        Getter for username attribute
+        """
+        return self.buyer_id
 
 
 class SellerItems(db.Model):
@@ -106,51 +137,150 @@ class SellerItems(db.Model):
         """
         return f"<Buyer {self.buyer_id}>"
 
+    def get_seller_id(self):
+        """
+        Getter for username attribute
+        """
+        return self.seller_id
+
+
+class RegisterForm(FlaskForm):
+    """Registration Form Class"""
+
+    username = StringField(
+        validators=[InputRequired(), Length(min=4, max=250)],
+        render_kw={"placeholder": "Username"},
+    )
+    password = PasswordField(
+        validators=[InputRequired(), Length(min=4, max=250)],
+        render_kw={"placeholder": "Password"},
+    )
+
+    submit = SubmitField("Register")
+
+    def validate_username(self, username):
+        """Method to ensure valid username"""
+        existing_user_username = User.query.filter_by(username=username.data).first()
+
+        if existing_user_username:
+            raise ValidationError(
+                "That Username already exists. Please choose a different one."
+            )
+
+
+class LoginForm(FlaskForm):
+    """Login Form CLass"""
+
+    username = StringField(
+        validators=[InputRequired(), Length(min=4, max=250)],
+        render_kw={"placeholder": "Username"},
+    )
+    password = PasswordField(
+        validators=[InputRequired(), Length(min=4, max=250)],
+        render_kw={"placeholder": "Password"},
+    )
+
+    submit = SubmitField("Login")
+
 
 db.create_all()
-login_manager = LoginManager()
-login_manager.login_view = "login"
-login_manager.init_app(app)
-
-
-@login_manager.user_loader
-def load_user(user_name):
-    """
-    Required by flask_login
-    """
-    return Person.query.get(user_name)
 
 
 @bp.route("/")
 def home():
+    """Dummy Docstring"""
+
+    # check if current_user is anonymous
+    if current_user.is_anonymous:
+        return redirect("/login")
+
+    # get user's favorite artists and update the list of Artist Name
+    # buyer_id = current_user.buyer_id
+    # user_name = current_user.email
+
+    # Get list of items for sales and list of item that current user are saving in their cart
+    # list_item = Items.query.all()
+    # user_cart = BuyerItems.query.filter_by(buyer_id).all()
+
+    data = json.dumps(
+        {}
+        # {"list_item": list_item, "user_cart": user_cart, "user_name": user_name}
+    )
+    return render_template("index.html", data=data,)
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """Dummy Docstring"""
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user:
+            if bcrypt.check_password_hash(
+                user.password, form.password.data.encode("utf-8")
+            ):
+                login_user(user)
+                entered_user = form.username.data
+                # return dashboard(form.username.data)
+                return redirect(url_for("bp.home"))
+    return flask.render_template("login.html", form=form,)
+
+
+@app.route("/dashboard", methods=["GET", "POST"])
+def dashboard():
+    """Dummy Docstring"""
     return render_template("index.html")
+
+
+@app.route("/logout", methods=["GET", "POST"])
+@login_required
+def logout():
+    """Dummy Docstring"""
+    logout_user()
+    return redirect(url_for("login"))
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    """Dummy Docstring"""
+    form = RegisterForm()
+
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode(
+            "utf-8"
+        )
+        new_user = User(username=form.username.data, password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect(url_for("login"))
+
+    return flask.render_template("register.html", form=form)
 
 
 app.register_blueprint(bp)
 
 # Do not remove, Stripe handling api.
-# @app.route("/create-checkout-session", methods=["POST"])
-# def create_checkout_session():
-#     try:
-#         checkout_session = stripe.checkout.Session.create(
-#             line_items=[
-#                 {
-#                     # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-#                     "price": "price_1JrXhtJ2O3RVC57ZFhuSMEgu",
-#                     "quantity": 1,
-#                 },
-#             ],
-#             payment_method_types=[
-#                 "card",
-#             ],
-#             mode="payment",
-#             success_url=request.base_url + "/success.html",
-#             cancel_url=url_for('home', _external=True),
-#         )
-#     except Exception as e:
-#         return str(e)
+@app.route("/create-checkout-session", methods=["POST"])
+def create_checkout_session():
+    """Dummy Docstring"""
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            line_items=[
+                {
+                    # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
+                    "price": "price_1JrXhtJ2O3RVC57ZFhuSMEgu",
+                    "quantity": 1,
+                },
+            ],
+            payment_method_types=["card",],
+            mode="payment",
+            success_url=request.base_url + "/success.html",
+            cancel_url=url_for("home", _external=True),
+        )
+    except Exception as e:
+        return str(e)
 
-#     return redirect(checkout_session.url, code=303)
+    return redirect(checkout_session.url, code=303)
 
 
 app.run(host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", 8081)), debug=True)

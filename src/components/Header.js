@@ -13,7 +13,6 @@ import { DiPostgresql, DiPython, DiReact, DiHeroku } from 'react-icons/di'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 
 import React from 'react';
-import GoogleLogin from 'react-google-login';
 
 
 const solutions = [
@@ -72,20 +71,6 @@ const resources = [
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
-}
-
-const handleLogin = async googleData => {
-  const res = await fetch("/api/v1/auth/google", {
-    method: "POST",
-    body: JSON.stringify({
-      token: googleData.tokenId
-    }),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
-  const data = await res.json()
-  // store returned user somehow
 }
 
 
@@ -220,22 +205,10 @@ function Header() {
             </Popover>
           </Popover.Group>
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-            <GoogleLogin
-              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-              buttonText="Log in with Google"
-              onSuccess={handleLogin}
-              onFailure={handleLogin}
-              cookiePolicy={'single_host_origin'}
-            />
-            <a href="/#" className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
-              Sign in
-            </a>
-            <a
-              href="/#"
-              className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-            >
-              Sign up
-            </a>
+            <a></a>
+            <form method="POST" action="/logout">
+              <button className="btn ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700" >Log Out</button>
+            </form>
           </div>
         </div>
       </div>

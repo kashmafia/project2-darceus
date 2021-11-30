@@ -1,4 +1,6 @@
 import './App.css';
+import React, {useState} from 'react'
+
 import Hero from './components/Hero';
 import chair from './components/chair.jpeg';
 import Dashboard from './components/Dashboard';
@@ -6,38 +8,49 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 
 function App() {
-  const products = [
+
+  // const args = JSON.parse(document.getElementById("data").text);
+  // const real_product = args.list_item;
+  // console.log(real_product);
+
+  // const [cart, setCart] = useState(args.user_cart);
+  const [cart, setCart] = useState([
     {
+      id: 1,
       price: 1000.00,
       name: 'Ergonomic chair',
       description: 'fancy chair, like new',
       image: chair,
-    },
-    {
-      price: 1000.00,
-      name: 'Ergonomic chair',
-      description: 'fancy chair, like new',
-      image: chair,
-    },
-    {
-      price: 1000.00,
-      name: 'Ergonomic chair',
-      description: 'fancy chair, like new',
-      image: chair,
-    },
-    {
-      price: 1000.00,
-      name: 'Ergonomic chair',
-      description: 'fancy chair, like new',
-      image: chair,
-    },
-    {
-      price: 1000.00,
-      name: 'Ergonomic chair',
-      description: 'fancy chair, like new',
-      image: chair,
+      quantity: 10,
+    },{
+      id: 3,
+      name: 'Throwback Hip Bag',
+      price: 90.00,
+      description: 1,
+      image: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg',
+      quantity:1,
     }
-  ]
+  ]);
+
+  
+  
+  const products = [{
+    id: 1,
+    price: 1000.00,
+    name: 'Ergonomic chair',
+    description: 'fancy chair, like new',
+    image: chair,
+    quantity: 10,
+  },
+  {
+    id: 2,
+    price: 1000.00,
+    name: 'Another Ergonomic chair',
+    description: 'fancy chair, like new',
+    image: chair,
+    quantity: 10,
+  },
+];
 
 
   return (
@@ -49,7 +62,7 @@ function App() {
             <Hero />
           </div>
           <div>
-            <Dashboard item={products} absolute />
+            <Dashboard products={products} item={cart} setCart={setCart} absolute />
           </div>
           <Footer absolute />
         </section>
