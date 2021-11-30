@@ -5,21 +5,49 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .grandParentContainer {
+            display: table;
+            height: 100%;
+            margin: 0 auto;
+        }
+
+        .parentContainer {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .loginContainer {
+            padding-left: 100px;
+        }
+
+        .linkContainer {
+            padding-left: 80px;
+        }
+    </style>
     <title>Login</title>
 </head>
 
 <body>
-    <h1>Login Page</h1>
-
-    <form method="POST" action="">
-        {{ form.hidden_tag() }}
-        {{ form.username }}
-        {{ form.password }}
-        {{ form.submit }}
-    </form>
+    <div class="grandParentContainer">
+        <div class="parentContainer">
+            <div class="loginContainer">
+                <h1>Login Page</h1>
+            </div>
 
 
-    <a href="{{url_for('register')}}"> Dont have an account? Sign up</a><br>
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                {{ form.username }}
+                {{ form.password }}
+                {{ form.submit }}
+            </form>
+
+
+            <a class="linkContainer" href="{{url_for('register')}}"> Dont have an account? Sign up</a><br>
+        </div>
+    </div>
+
 
 </body>
 
