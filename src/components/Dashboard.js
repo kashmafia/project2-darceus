@@ -5,6 +5,7 @@ function Dashboard ({item, products, setCart}) {
     const [showItem, setShowItem] = useState(false)
     
     const addItem = (newItem) => {
+        console.log(newItem);
         const newCart = [...item, newItem];
         setCart(newCart);
         //TODO: update BuyerItems
