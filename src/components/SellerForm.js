@@ -125,7 +125,7 @@ function onClickSave() {
                    } */}
  
  
-                 <form method="POST" onSubmit={onClickSave}>
+                 <form onSubmit={onClickSave}>
                    <fieldset>
                    <div className="shadow sm:rounded-md sm:overflow-hidden">
                    <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
