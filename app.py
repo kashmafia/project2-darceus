@@ -173,34 +173,17 @@ def home():
     print(username, user_id)
 
     # Get list of items for sales and list of item that current user are saving in their cart
-    list_item = Items.query.all()
-    user_cart = BuyerItems.query.filter_by(buyer_id=user_id).all()
+    # list_item = Items.query.all()
+    # user_cart = BuyerItems.query.filter_by(buyer_id).all()
 
-    # make a dictionary of user cart for faster look up
-    item_in_cart = {}
-    for item in user_cart:
-        item_in_cart[item.item_id] = item.buyer_id
-
-    # Query list_item and send all item to client side
-    products = []
-    cart = []
-    for item in list_item:
-        # serialize item into dict and save it to products
-        product = {}
-        product["id"] = item.id
-        product["description"] = item.item_description
-        product["name"] = item.item_name
-        product["seller"] = item.username
-        product["image"] = item.item_pic
-        product["price"] = item.price
-        products.append(product)
-
-        # if item's id is in user's cart, add product to their cart
-        if item.id in item_in_cart:
-            cart.append(product)
-
-    data = json.dumps({"list_item": products, "user_cart": cart, "user_name": username})
-    return render_template("index.html", data=data,)
+    data = json.dumps(
+        {}
+        # {"list_item": list_item, "user_cart": user_cart, "user_name": user_name}
+    )
+    return render_template(
+        "index.html",
+        data=data,
+    )
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -216,7 +199,10 @@ def login():
                 USER = form.username.data
                 # return dashboard(form.username.data)
                 return redirect(url_for("bp.home"))
-    return flask.render_template("login.html", form=form,)
+    return flask.render_template(
+        "login.html",
+        form=form,
+    )
 
 
 @app.route("/dashboard", methods=["GET", "POST"])
@@ -292,7 +278,9 @@ def create_checkout_session():
                     "quantity": 1,
                 },
             ],
-            payment_method_types=["card",],
+            payment_method_types=[
+                "card",
+            ],
             mode="payment",
             success_url=request.base_url + "/success.html",
             cancel_url=url_for("home", _external=True),
