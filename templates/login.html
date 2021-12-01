@@ -6,12 +6,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
     <style>
         body {
             background: url(https://img.wallpapersafari.com/desktop/1920/1080/68/40/VLymDo.jpg);
             background-size: 100%;
             padding: 25px;
+        }
+
+        .form {
+            font-family: sans-serif;
+            font-size: 16px;
+            padding: 10px;
+            padding-top: 10px;
+        }
+
+        .form * {
+            box-sizing: border-box;
+            line-height: 1.5;
+            padding: 10px;
+        }
+
+        .form__title {
+            font-size: 2em;
+            font-weight: 600;
         }
 
         .grandParentContainer {
@@ -26,6 +43,7 @@
         }
 
         .loginContainer {
+            padding-left: 100px;
             font-family: Fantasy;
             font-size: larger;
         }
@@ -37,7 +55,6 @@
         }
     </style>
 
-
     <title>Login</title>
 </head>
 
@@ -48,20 +65,19 @@
                 <h1>Welcome to the Login Page</h1>
             </div>
 
-
             <form class="form" method="POST" action="">
+                <div class="form__title">Login</div>
                 {{ form.hidden_tag() }}
-                {{ form.username }}
-                {{ form.password }}
-                {{ form.submit }}
+                {{ form.username }}<br>
+                {{ form.password }}<br>
+                <br>
+                {{ form.submit }}<br>
+                <br>
             </form>
-
 
             <a class="linkContainer" href="{{url_for('register')}}"> Dont have an account? Sign up</a><br>
         </div>
     </div>
-
-
 </body>
 
 </html>

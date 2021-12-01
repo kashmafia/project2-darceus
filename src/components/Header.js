@@ -35,7 +35,7 @@ const solutions = [
     icon: LightningBoltIcon
   },
   {
-    name: 'Johnathan Choi',
+    name: 'Jonathan Choi',
     description: "Humble God",
     href: 'https://github.com/Jon2234',
     icon: PuzzleIcon,
