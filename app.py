@@ -362,4 +362,8 @@ def create_checkout_session():
     return redirect(checkout_session.url, code=303)
 
 
-app.run(host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", 8081)), debug=True)
+if __name__ == "__main__":
+    app.run(
+        host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", 8081)), debug=True
+    )
+
