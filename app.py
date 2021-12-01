@@ -1,14 +1,20 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# pylint: disable=no-member
+"""
+Server app
+"""
 import os
 import datetime
+import json
 import bcrypt
 from dotenv import load_dotenv, find_dotenv
-import json
 import flask
 
 import stripe
-from flask import jsonify, render_template, redirect, flash, request
+from flask import jsonify, render_template, redirect, request
+from flask.helpers import url_for
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.dialects.postgresql import BYTEA
 from flask_login import (
     login_user,
     current_user,
@@ -28,7 +34,6 @@ load_dotenv(find_dotenv())
 uri = os.getenv("DATABASE_URL")  # or other relevant config var
 if uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://", 1)
-from flask.helpers import url_for
 
 
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
@@ -50,10 +55,17 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
+    """
+    Login manager
+    """
     return User.query.get(int(user_id))
 
 
 class User(db.Model, UserMixin):
+    """
+    User table
+    """
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(250), nullable=False, unique=True)
     password = db.Column(db.String(250), nullable=False)
@@ -80,7 +92,7 @@ class Items(db.Model):
     item_description = db.Column(db.String(640))
     item_name = db.Column(db.String(60))
     username = db.Column(db.String(120))
-    item_pic = db.Column(db.String(120))
+    item_pic = db.Column(db.String(1000))
     date = db.Column(db.Date, default=datetime.datetime.utcnow)
     price = db.Column(db.Float)
 
@@ -124,6 +136,10 @@ class SellerItems(db.Model):
 
 
 class RegisterForm(FlaskForm):
+    """
+    Register form
+    """
+
     username = StringField(
         validators=[InputRequired(), Length(min=4, max=250)],
         render_kw={"placeholder": "Username"},
@@ -145,6 +161,10 @@ class RegisterForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
+    """
+    Login form
+    """
+
     username = StringField(
         validators=[InputRequired(), Length(min=4, max=250)],
         render_kw={"placeholder": "Username"},
@@ -162,6 +182,9 @@ db.create_all()
 
 @bp.route("/")
 def home():
+    """
+    Main page
+    """
 
     # check if current_user is anonymous
     if current_user.is_anonymous:
@@ -173,21 +196,45 @@ def home():
     print(username, user_id)
 
     # Get list of items for sales and list of item that current user are saving in their cart
-    # list_item = Items.query.all()
-    # user_cart = BuyerItems.query.filter_by(buyer_id).all()
+    list_item = Items.query.all()
+    user_cart = BuyerItems.query.filter_by(buyer_id=user_id).all()
 
-    data = json.dumps(
-        {}
-        # {"list_item": list_item, "user_cart": user_cart, "user_name": user_name}
-    )
-    return render_template(
-        "index.html",
-        data=data,
-    )
+    # make a dictionary of user cart for faster look up
+    item_in_cart = {}
+    for item in user_cart:
+        item_in_cart[item.item_id] = item.buyer_id
+
+    # Query list_item and send all item to client side
+    products = []
+    cart = []
+    for item in list_item:
+        # serialize item into dict and save it to products
+        product = {}
+        product["id"] = item.id
+        product["description"] = item.item_description
+        product["name"] = item.item_name
+        product["seller"] = item.username
+        product["image"] = item.item_pic
+        product["price"] = item.price
+        products.append(product)
+
+        # if item's id is in user's cart, add product to their cart
+        if item.id in item_in_cart:
+            cart.append(product)
+
+    print(products)
+    print(cart)
+
+    data = json.dumps({"list_item": products, "user_cart": cart, "user_name": username})
+    return render_template("index.html", data=data,)
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    """
+    Login API
+    """
+
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -199,26 +246,35 @@ def login():
                 USER = form.username.data
                 # return dashboard(form.username.data)
                 return redirect(url_for("bp.home"))
-    return flask.render_template(
-        "login.html",
-        form=form,
-    )
+    return flask.render_template("login.html", form=form,)
 
 
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
+    """
+    Dashboard API
+    """
+
     return render_template("index.html")
 
 
 @app.route("/logout", methods=["GET", "POST"])
 @login_required
 def logout():
+    """
+    Logout API
+    """
+
     logout_user()
     return redirect(url_for("login"))
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    """
+    Register API
+    """
+
     form = RegisterForm()
 
     if form.validate_on_submit():
@@ -236,8 +292,12 @@ def register():
 app.register_blueprint(bp)
 
 
-@app.route("/save_product", methods=["POST"])
+@app.route("/save_product", methods=["GET", "POST"])
 def save_product():
+    """
+    Seller form API: to save new item for sale
+    """
+
     item_name = flask.request.json.get("company_website")
     item_price = flask.request.json.get("price")
     item_about = flask.request.json.get("about")
@@ -257,7 +317,7 @@ def save_product():
         item_description=item_about,
         username=username,
         item_pic=item_image,
-    )  # item_pic needs to be added back when kash db is working
+    )
     db.session.add(new_item)
     db.session.commit()
 
@@ -266,9 +326,81 @@ def save_product():
     return jsonify({"message": "Add items success"})
 
 
+def save_product_testing(item_name, item_price, item_about):
+    """
+    Testing API
+    """
+
+    username = "gary"
+
+    print(item_name)
+    print(item_price)
+    print(item_about)
+    print(username)
+
+    new_item = Items(
+        item_name=item_name,
+        price=item_price,
+        item_description=item_about,
+        username=username,
+    )  # item_pic needs to be added back when kash db is working
+    db.session.add(new_item)
+    db.session.commit()
+
+
+@app.route("/add_to_cart", methods=["POST"])
+def add_to_cart():
+    """
+    Cart (add item) API
+    """
+
+    new_item = flask.request.json.get("new-item")
+    print(new_item)
+
+    username = current_user.username
+    user_id = User.query.filter_by(username=username).first().id
+
+    # Check if item already exist
+    check_if_item_exist = BuyerItems.query.filter_by(
+        item_id=new_item["id"], buyer_id=user_id
+    ).first()
+    if check_if_item_exist is None:
+        # Add new item to table
+
+        new_buyer_item = BuyerItems(item_id=new_item["id"], buyer_id=user_id)
+        db.session.add(new_buyer_item)
+        db.session.commit()
+        return jsonify({"message": "success"})
+
+    return jsonify({"message": "fail"})
+
+
+@app.route("/remove_from_cart", methods=["POST"])
+def remove_from_cart():
+    """
+    Cart (remove item) API
+    """
+
+    remove_item = flask.request.json.get("remove-item")
+    print(remove_item)
+
+    username = current_user.username
+    user_id = User.query.filter_by(username=username).first().id
+
+    db.session.query(BuyerItems).filter(
+        BuyerItems.item_id == remove_item["id"], BuyerItems.buyer_id == user_id
+    ).delete()
+    db.session.commit()
+    return jsonify({"message": "success"})
+
+
 # Do not remove, Stripe handling api.
 @app.route("/create-checkout-session", methods=["POST"])
 def create_checkout_session():
+    """
+    Stripe payment API
+    """
+
     try:
         checkout_session = stripe.checkout.Session.create(
             line_items=[
@@ -278,17 +410,19 @@ def create_checkout_session():
                     "quantity": 1,
                 },
             ],
-            payment_method_types=[
-                "card",
-            ],
+            payment_method_types=["card",],
             mode="payment",
             success_url=request.base_url + "/success.html",
             cancel_url=url_for("home", _external=True),
         )
-    except Exception as e:
-        return str(e)
+    except Exception as exceptions:
+        return str(exceptions)
 
     return redirect(checkout_session.url, code=303)
 
 
-app.run(host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", 8081)), debug=True)
+if __name__ == "__main__":
+    app.run(
+        host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", 8081)), debug=True
+    )
+
