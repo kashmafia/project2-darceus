@@ -80,7 +80,7 @@ class Items(db.Model):
     item_description = db.Column(db.String(640))
     item_name = db.Column(db.String(60))
     username = db.Column(db.String(120))
-    item_pic = db.Column(BYTEA)
+    item_pic = db.Column(db.String(120))
     date = db.Column(db.Date, default=datetime.datetime.utcnow)
     price = db.Column(db.Float)
 
