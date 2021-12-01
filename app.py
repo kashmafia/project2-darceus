@@ -80,7 +80,7 @@ class Items(db.Model):
     item_description = db.Column(db.String(640))
     item_name = db.Column(db.String(60))
     username = db.Column(db.String(120))
-    item_pic = db.Column(BYTEA)
+    item_pic = db.Column(db.String(1000))
     date = db.Column(db.Date, default=datetime.datetime.utcnow)
     price = db.Column(db.Float)
 
@@ -199,6 +199,9 @@ def home():
         if item.id in item_in_cart:
             cart.append(product)
 
+    print(products)
+    print(cart)
+
     data = json.dumps({"list_item": products, "user_cart": cart, "user_name": username})
     return render_template("index.html", data=data,)
 
@@ -250,7 +253,7 @@ def register():
 app.register_blueprint(bp)
 
 
-@app.route("/save_product", methods=["POST"])
+@app.route("/save_product", methods=["GET", "POST"])
 def save_product():
     item_name = flask.request.json.get("company_website")
     item_price = flask.request.json.get("price")
@@ -269,13 +272,52 @@ def save_product():
         price=item_price,
         item_description=item_about,
         username=username,
-    )  # item_pic needs to be added back when kash db is working
+        item_pic=item_image,
+    )
     db.session.add(new_item)
     db.session.commit()
 
     # response = {"company_website": item_name, "price": item_price, "about": item_about}
     # return flask.jsonify(response)
     return jsonify({"message": "Add items success"})
+
+
+@app.route("/add_to_cart", methods=["POST"])
+def add_to_cart():
+    new_item = flask.request.json.get("new-item")
+    print(new_item)
+
+    username = current_user.username
+    user_id = User.query.filter_by(username=username).first().id
+
+    # Check if item already exist
+    check_if_item_exist = BuyerItems.query.filter_by(
+        item_id=new_item["id"], buyer_id=user_id
+    ).first()
+    if check_if_item_exist is None:
+        # Add new item to table
+
+        new_buyer_item = BuyerItems(item_id=new_item["id"], buyer_id=user_id)
+        db.session.add(new_buyer_item)
+        db.session.commit()
+        return jsonify({"message": "success"})
+
+    return jsonify({"message": "fail"})
+
+
+@app.route("/remove_from_cart", methods=["POST"])
+def remove_from_cart():
+    remove_item = flask.request.json.get("remove-item")
+    print(remove_item)
+
+    username = current_user.username
+    user_id = User.query.filter_by(username=username).first().id
+
+    db.session.query(BuyerItems).filter(
+        BuyerItems.item_id == remove_item["id"], BuyerItems.buyer_id == user_id
+    ).delete()
+    db.session.commit()
+    return jsonify({"message": "success"})
 
 
 # Do not remove, Stripe handling api.

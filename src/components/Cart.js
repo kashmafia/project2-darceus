@@ -4,11 +4,27 @@ import { XIcon } from '@heroicons/react/outline'
 
 export default function Cart({item, open, setOpen, setCart}) {
   const [cartTotal, setCartTotal] = useState(0);
-  const removeItem = (removeProduct) => {
+  const removeItem = async (removeProduct) => {
     let hardCopy = item;
+
+    async function removeItemToCart(removeProduct) {
+      const response = await fetch('/remove_from_cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({'remove-item': removeProduct}),
+      });
+      const movies = await response.json();
+      return movies;
+    }
+
+    removeItemToCart(removeProduct).then(response => {
+      console.log(response.message);
+      });
+      
     hardCopy = hardCopy.filter(product => product !== removeProduct);
     setCart(hardCopy);
-    //TODO: Remove button (update Buyer Item table)
   }
 
   //TODO: Subtotal
@@ -69,7 +85,8 @@ export default function Cart({item, open, setOpen, setCart}) {
                       </div>
                     </div>
 
-                    <div className="mt-8">
+                    {item ? (
+                      <div className="mt-8">
                       <div className="flow-root">
                         <ul className="-my-6 divide-y divide-gray-200">
                           {item.map((product, idx) => (
@@ -108,6 +125,7 @@ export default function Cart({item, open, setOpen, setCart}) {
                         </ul>
                       </div>
                     </div>
+                    ) : (<> </>)}
                   </div>
 
                   <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
