@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@craco/craco": "^6.4.0",
+    "@craco/craco": "^6.4.2",
     "@headlessui/react": "^1.4.1",
     "@heroicons/react": "^1.0.5",
     "@stripe/react-stripe-js": "^1.6.0",
