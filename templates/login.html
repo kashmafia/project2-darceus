@@ -8,27 +8,80 @@
 
     <style>
         body {
+            margin: 0;
+            padding: 0;
             background: url(https://img.wallpapersafari.com/desktop/1920/1080/68/40/VLymDo.jpg);
             background-size: 100%;
-            padding: 25px;
+            font-family: monospace;
+
         }
 
-        .form {
-            font-family: sans-serif;
-            font-size: 16px;
-            padding: 10px;
-            padding-top: 10px;
+        .body h1 {
+            font-size: xx-large;
+            font-family: monospace;
         }
 
-        .form * {
-            box-sizing: border-box;
-            line-height: 1.5;
-            padding: 10px;
+        .box {
+            width: 300px;
+            padding: 40px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #191919;
+            text-align: center;
         }
 
-        .form__title {
-            font-size: 2em;
-            font-weight: 600;
+        .box h1 {
+            color: rgb(255, 255, 255);
+            text-transform: uppercase;
+            font-weight: 500;
+            font-size: xx-large;
+        }
+
+        .box input[type="text"],
+        .box input[type="password"] {
+            border: 0;
+            background: none;
+            display: block;
+            margin: 20px auto;
+            text-align: center;
+            border: 2px solid #6c5ce7;
+            padding: 15px 10px;
+            width: 200px;
+            height: 15px;
+            outline: none;
+            color: white;
+            border-radius: 24px;
+            transition: 0.25s;
+        }
+
+        .box input[type="text"]:focus,
+        .box input[type="password"]:focus {
+            width: 285px;
+            border-color: rgb(255, 255, 255);
+        }
+
+        .box input[type="submit"] {
+            border: 0;
+            background: none;
+            display: block;
+            margin: 20px auto;
+            text-align: center;
+            border: 2px solid #6c5ce7;
+            padding: 15px 40px;
+            outline: none;
+            color: white;
+            border-radius: 24px;
+            transition: 0.25s;
+            cursor: pointer;
+            font-family: fantasy;
+            font-stretch: expanded;
+        }
+
+        .box input[type="submit"]:hover {
+            background: #6c5ce7;
+
         }
 
         .grandParentContainer {
@@ -42,16 +95,18 @@
             vertical-align: middle;
         }
 
-        .loginContainer {
-            padding-left: 100px;
-            font-family: Fantasy;
-            font-size: larger;
+        .loginTitle {
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: x-large;
+            padding: 150px;
+            text-align: center;
         }
 
         .linkContainer {
             padding: 25px;
-            padding-left: 100px;
-            padding-top: 25px;
+            font-family: sans-serif;
+            font-weight: 400;
+            color: thistle;
         }
     </style>
 
@@ -61,21 +116,19 @@
 <body>
     <div class="grandParentContainer">
         <div class="parentContainer">
-            <div class="loginContainer">
+            <div class="loginTitle">
                 <h1>Welcome to the Login Page</h1>
             </div>
 
-            <form class="form" method="POST" action="">
-                <div class="form__title">Login</div>
+            <form class="box" method="POST" action="">
+                <h1>Login</h1>
                 {{ form.hidden_tag() }}
-                {{ form.username }}<br>
-                {{ form.password }}<br>
-                <br>
+                {{ form.username }}
+                {{ form.password }}
                 {{ form.submit }}<br>
-                <br>
+                <a class="linkContainer" href="{{url_for('register')}}"> Dont have an account? Sign up</a><br>
             </form>
 
-            <a class="linkContainer" href="{{url_for('register')}}"> Dont have an account? Sign up</a><br>
         </div>
     </div>
 </body>
