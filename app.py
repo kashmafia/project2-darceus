@@ -173,15 +173,6 @@ def home():
     print(username, user_id)
 
     # Get list of items for sales and list of item that current user are saving in their cart
-<<<<<<< HEAD
-    # list_item = Items.query.all()
-    # user_cart = BuyerItems.query.filter_by(buyer_id).all()
-
-    data = json.dumps(
-        {}
-        # {"list_item": list_item, "user_cart": user_cart, "user_name": user_name}
-    )
-=======
     list_item = Items.query.all()
     user_cart = BuyerItems.query.filter_by(buyer_id=user_id).all()
 
@@ -212,7 +203,6 @@ def home():
     print(cart)
 
     data = json.dumps({"list_item": products, "user_cart": cart, "user_name": username})
->>>>>>> origin/main
     return render_template("index.html", data=data,)
 
 
@@ -293,7 +283,6 @@ def save_product():
     return jsonify({"message": "Add items success"})
 
 
-<<<<<<< HEAD
 def save_product_testing(item_name, item_price, item_about):
     username = "gary"
 
@@ -310,7 +299,8 @@ def save_product_testing(item_name, item_price, item_about):
     )  # item_pic needs to be added back when kash db is working
     db.session.add(new_item)
     db.session.commit()
-=======
+
+
 @app.route("/add_to_cart", methods=["POST"])
 def add_to_cart():
     new_item = flask.request.json.get("new-item")
@@ -347,7 +337,6 @@ def remove_from_cart():
     ).delete()
     db.session.commit()
     return jsonify({"message": "success"})
->>>>>>> origin/main
 
 
 # Do not remove, Stripe handling api.
