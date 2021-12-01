@@ -11,8 +11,10 @@ function Dashboard ({item, products, setCart}) {
         //TODO: update BuyerItems
         setShowItem(item => !item);
     }
+
     
     return (
+        
         <>
         <div className="bg-white">
             <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -37,13 +39,19 @@ function Dashboard ({item, products, setCart}) {
                                         onClick={() => addItem(product)}>Add to bag</button>
                             </div>
                         </a>
-                        
                         </>
+
                 ))}
+                
+
                 </div>
             </div>
         </div>
-        
+
+        <button class="w-1/4 flex-auto bg-transparent hover:text-indigo-600 items-center justify-center rounded-md border border-gray-300"
+                type="button" 
+                onClick={() => setShowItem(true)}>Shopping Cart</button>
+
 
         <Cart item={item} open={showItem} setOpen={setShowItem} setCart={setCart}/>
         </>
