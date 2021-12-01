@@ -80,9 +80,10 @@ function Dashboard ({item, products, setCart}) {
                 ): 
                 (<> </>)}
 
+                
             </div>
-        </div>
 
+        </div>
 
         <Cart item={item} open={showItem} setOpen={setShowItem} setCart={setCart}/>
         </>
