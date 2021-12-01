@@ -283,6 +283,24 @@ def save_product():
     return jsonify({"message": "Add items success"})
 
 
+def save_product_testing(item_name, item_price, item_about):
+    username = "gary"
+
+    print(item_name)
+    print(item_price)
+    print(item_about)
+    print(username)
+
+    new_item = Items(
+        item_name=item_name,
+        price=item_price,
+        item_description=item_about,
+        username=username,
+    )  # item_pic needs to be added back when kash db is working
+    db.session.add(new_item)
+    db.session.commit()
+
+
 @app.route("/add_to_cart", methods=["POST"])
 def add_to_cart():
     new_item = flask.request.json.get("new-item")
@@ -344,4 +362,8 @@ def create_checkout_session():
     return redirect(checkout_session.url, code=303)
 
 
-app.run(host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", 8081)), debug=True)
+if __name__ == "__main__":
+    app.run(
+        host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", 8081)), debug=True
+    )
+
