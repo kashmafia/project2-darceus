@@ -12,9 +12,7 @@ import {
 import { DiPostgresql, DiPython, DiReact, DiHeroku } from 'react-icons/di'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 
-import React, {useState} from 'react';
-import Cart from './Cart';
-
+import React from 'react';
 
 const solutions = [
   {
@@ -77,7 +75,6 @@ function classNames(...classes) {
 
 
 function Header() {
-  const [state, setState] = useState("ShowCart");
 
   return (
     <Popover className="relative bg-white">
@@ -209,17 +206,6 @@ function Header() {
           </Popover.Group>
 
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-          
-            <a></a>
-            <button className="btn ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700" 
-            onClick={() => setState("ShowCart")}
-            >Shopping Cart</button>
-          </div>
-
-          <div>{state === "ShowCart" && <Cart/>}</div>
-          
-
-          <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
             <a></a>
             <form method="POST" action="/logout">
               <button className="btn ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700" >Log Out</button>
@@ -230,8 +216,6 @@ function Header() {
           
         </div>
       </div>
-
-      
 
       <Transition
         as={Fragment}

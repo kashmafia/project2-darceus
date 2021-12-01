@@ -43,6 +43,11 @@ function Dashboard ({item, products, setCart}) {
                 </div>
             </div>
         </div>
+
+        <div>
+            <button>Shopping Cart</button>
+
+        </div>
         
 
         <Cart item={item} open={showItem} setOpen={setShowItem} setCart={setCart}/>
