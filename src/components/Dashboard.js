@@ -76,9 +76,12 @@ function Dashboard ({item, products, setCart}) {
                     </div>
                 ): 
                 (<> </>)}
+                <button class="w-1/4 flex-auto bg-transparent hover:text-indigo-600 items-center justify-center rounded-md border border-gray-300" 
+                    type="button" 
+                    onClick={() => setShowItem(true)}>Shopping Cart</button>
             </div>
+
         </div>
-        
 
         <Cart item={item} open={showItem} setOpen={setShowItem} setCart={setCart}/>
         </>
