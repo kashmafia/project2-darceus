@@ -80,7 +80,7 @@ class Items(db.Model):
     item_description = db.Column(db.String(640))
     item_name = db.Column(db.String(60))
     username = db.Column(db.String(120))
-    item_pic = db.Column(BYTEA)
+    item_pic = db.Column(db.String(120))
     date = db.Column(db.Date, default=datetime.datetime.utcnow)
     price = db.Column(db.Float)
 
@@ -263,12 +263,14 @@ def save_product():
     print(item_price)
     print(item_about)
     print(username)
+    print(item_image)
 
     new_item = Items(
         item_name=item_name,
         price=item_price,
         item_description=item_about,
         username=username,
+        item_pic=item_image,
     )  # item_pic needs to be added back when kash db is working
     db.session.add(new_item)
     db.session.commit()
