@@ -263,12 +263,14 @@ def save_product():
     print(item_price)
     print(item_about)
     print(username)
+    print(item_image)
 
     new_item = Items(
         item_name=item_name,
         price=item_price,
         item_description=item_about,
         username=username,
+        item_pic=item_image,
     )  # item_pic needs to be added back when kash db is working
     db.session.add(new_item)
     db.session.commit()
