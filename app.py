@@ -80,7 +80,7 @@ class Items(db.Model):
     item_description = db.Column(db.String(640))
     item_name = db.Column(db.String(60))
     username = db.Column(db.String(120))
-    item_pic = db.Column(db.String(120))
+    item_pic = db.Column(db.String(1000))
     date = db.Column(db.Date, default=datetime.datetime.utcnow)
     price = db.Column(db.Float)
 
@@ -173,17 +173,37 @@ def home():
     print(username, user_id)
 
     # Get list of items for sales and list of item that current user are saving in their cart
-    # list_item = Items.query.all()
-    # user_cart = BuyerItems.query.filter_by(buyer_id).all()
+    list_item = Items.query.all()
+    user_cart = BuyerItems.query.filter_by(buyer_id=user_id).all()
 
-    data = json.dumps(
-        {}
-        # {"list_item": list_item, "user_cart": user_cart, "user_name": user_name}
-    )
-    return render_template(
-        "index.html",
-        data=data,
-    )
+    # make a dictionary of user cart for faster look up
+    item_in_cart = {}
+    for item in user_cart:
+        item_in_cart[item.item_id] = item.buyer_id
+
+    # Query list_item and send all item to client side
+    products = []
+    cart = []
+    for item in list_item:
+        # serialize item into dict and save it to products
+        product = {}
+        product["id"] = item.id
+        product["description"] = item.item_description
+        product["name"] = item.item_name
+        product["seller"] = item.username
+        product["image"] = item.item_pic
+        product["price"] = item.price
+        products.append(product)
+
+        # if item's id is in user's cart, add product to their cart
+        if item.id in item_in_cart:
+            cart.append(product)
+
+    print(products)
+    print(cart)
+
+    data = json.dumps({"list_item": products, "user_cart": cart, "user_name": username})
+    return render_template("index.html", data=data,)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -199,10 +219,7 @@ def login():
                 USER = form.username.data
                 # return dashboard(form.username.data)
                 return redirect(url_for("bp.home"))
-    return flask.render_template(
-        "login.html",
-        form=form,
-    )
+    return flask.render_template("login.html", form=form,)
 
 
 @app.route("/dashboard", methods=["GET", "POST"])
@@ -236,7 +253,7 @@ def register():
 app.register_blueprint(bp)
 
 
-@app.route("/save_product", methods=["POST"])
+@app.route("/save_product", methods=["GET", "POST"])
 def save_product():
     item_name = flask.request.json.get("company_website")
     item_price = flask.request.json.get("price")
@@ -257,13 +274,51 @@ def save_product():
         item_description=item_about,
         username=username,
         item_pic=item_image,
-    )  # item_pic needs to be added back when kash db is working
+    )
     db.session.add(new_item)
     db.session.commit()
 
     # response = {"company_website": item_name, "price": item_price, "about": item_about}
     # return flask.jsonify(response)
     return jsonify({"message": "Add items success"})
+
+
+@app.route("/add_to_cart", methods=["POST"])
+def add_to_cart():
+    new_item = flask.request.json.get("new-item")
+    print(new_item)
+
+    username = current_user.username
+    user_id = User.query.filter_by(username=username).first().id
+
+    # Check if item already exist
+    check_if_item_exist = BuyerItems.query.filter_by(
+        item_id=new_item["id"], buyer_id=user_id
+    ).first()
+    if check_if_item_exist is None:
+        # Add new item to table
+
+        new_buyer_item = BuyerItems(item_id=new_item["id"], buyer_id=user_id)
+        db.session.add(new_buyer_item)
+        db.session.commit()
+        return jsonify({"message": "success"})
+
+    return jsonify({"message": "fail"})
+
+
+@app.route("/remove_from_cart", methods=["POST"])
+def remove_from_cart():
+    remove_item = flask.request.json.get("remove-item")
+    print(remove_item)
+
+    username = current_user.username
+    user_id = User.query.filter_by(username=username).first().id
+
+    db.session.query(BuyerItems).filter(
+        BuyerItems.item_id == remove_item["id"], BuyerItems.buyer_id == user_id
+    ).delete()
+    db.session.commit()
+    return jsonify({"message": "success"})
 
 
 # Do not remove, Stripe handling api.
@@ -278,9 +333,7 @@ def create_checkout_session():
                     "quantity": 1,
                 },
             ],
-            payment_method_types=[
-                "card",
-            ],
+            payment_method_types=["card",],
             mode="payment",
             success_url=request.base_url + "/success.html",
             cancel_url=url_for("home", _external=True),
