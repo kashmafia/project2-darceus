@@ -180,10 +180,7 @@ def home():
         {}
         # {"list_item": list_item, "user_cart": user_cart, "user_name": user_name}
     )
-    return render_template(
-        "index.html",
-        data=data,
-    )
+    return render_template("index.html", data=data,)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -199,10 +196,7 @@ def login():
                 USER = form.username.data
                 # return dashboard(form.username.data)
                 return redirect(url_for("bp.home"))
-    return flask.render_template(
-        "login.html",
-        form=form,
-    )
+    return flask.render_template("login.html", form=form,)
 
 
 @app.route("/dashboard", methods=["GET", "POST"])
@@ -266,6 +260,24 @@ def save_product():
     return jsonify({"message": "Add items success"})
 
 
+def save_product_testing(item_name, item_price, item_about):
+    username = "gary"
+
+    print(item_name)
+    print(item_price)
+    print(item_about)
+    print(username)
+
+    new_item = Items(
+        item_name=item_name,
+        price=item_price,
+        item_description=item_about,
+        username=username,
+    )  # item_pic needs to be added back when kash db is working
+    db.session.add(new_item)
+    db.session.commit()
+
+
 # Do not remove, Stripe handling api.
 @app.route("/create-checkout-session", methods=["POST"])
 def create_checkout_session():
@@ -278,9 +290,7 @@ def create_checkout_session():
                     "quantity": 1,
                 },
             ],
-            payment_method_types=[
-                "card",
-            ],
+            payment_method_types=["card",],
             mode="payment",
             success_url=request.base_url + "/success.html",
             cancel_url=url_for("home", _external=True),
