@@ -226,7 +226,10 @@ def home():
     print(cart)
 
     data = json.dumps({"list_item": products, "user_cart": cart, "user_name": username})
-    return render_template("index.html", data=data,)
+    return render_template(
+        "index.html",
+        data=data,
+    )
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -246,7 +249,10 @@ def login():
                 USER = form.username.data
                 # return dashboard(form.username.data)
                 return redirect(url_for("bp.home"))
-    return flask.render_template("login.html", form=form,)
+    return flask.render_template(
+        "login.html",
+        form=form,
+    )
 
 
 @app.route("/dashboard", methods=["GET", "POST"])
@@ -410,7 +416,9 @@ def create_checkout_session():
                     "quantity": 1,
                 },
             ],
-            payment_method_types=["card",],
+            payment_method_types=[
+                "card",
+            ],
             mode="payment",
             success_url=request.base_url + "/success.html",
             cancel_url=url_for("home", _external=True),
@@ -425,4 +433,3 @@ if __name__ == "__main__":
     app.run(
         host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", 8081)), debug=True
     )
-
