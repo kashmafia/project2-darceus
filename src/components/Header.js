@@ -1,5 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import {
   BadgeCheckIcon,
@@ -13,6 +13,7 @@ import { DiPostgresql, DiPython, DiReact, DiHeroku } from 'react-icons/di'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 
 import React from 'react';
+import Cart from './Cart';
 
 
 const solutions = [
@@ -75,7 +76,9 @@ function classNames(...classes) {
 
 
 
-function Header({ username }) {
+function Header({ username, item, setCart }) {
+  const [showItem, setShowItem] = useState(false)
+
   return (
     <Popover className="relative bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -206,13 +209,17 @@ function Header({ username }) {
           </Popover.Group>
           <div className="ml-80 right-0 static hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-0">
             <div className="ml-40 hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-              <p className="btn static ml-40 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-black bg-yellow-500 hover:bg-yellow-400" >Hi, {username}!</p>
+              <button class="btn static ml-40 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-black bg-yellow-500 hover:bg-yellow-400"
+                type="button"
+                onClick={() => setShowItem(true)}>{username}'s Shopping Cart</button>
             </div>
+
             <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
               <form method="POST" action="/logout">
                 <button className="btn ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700" >Log Out</button>
               </form>
             </div>
+            <Cart item={item} open={showItem} setOpen={setShowItem} setCart={setCart} />
           </div>
         </div>
       </div>
