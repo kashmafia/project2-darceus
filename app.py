@@ -401,24 +401,43 @@ def create_checkout_session():
     Stripe payment API
     """
 
+    # subtotal = flask.request.json.get("subtotal")
+
+    # # Create product for this checkout session
+    # product = stripe.Product.create(
+    #     name=datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+    # )
+    # price = stripe.Price.create(
+    #     product=f"{product['id']}", unit_amount=int(subtotal) * 100, currency="usd",
+    # )
+
+    # print(subtotal, product["id"], price["id"])
+
     try:
         checkout_session = stripe.checkout.Session.create(
             line_items=[
                 {
                     # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-                    "price": "price_1JrXhtJ2O3RVC57ZFhuSMEgu",
+                    # "price": f"{price['id']}",
+                    "price": "price_1K265jJ2O3RVC57ZZcqwDmRy",
                     "quantity": 1,
                 },
             ],
+            billing_address_collection="auto",
+            shipping_address_collection={"allowed_countries": ["US", "CA"],},
             payment_method_types=["card",],
             mode="payment",
-            success_url=request.base_url + "/success.html",
-            cancel_url=url_for("home", _external=True),
+            success_url="https://www.google.com/",
+            cancel_url="https://www.google.com/",
         )
-    except Exception as exceptions:
-        return str(exceptions)
 
-    return redirect(checkout_session.url, code=303)
+        # print(url_for("home"))
+    except Exception as exceptions:
+        print(exceptions)
+        return jsonify({"message": "fail"})
+    redirect_link = checkout_session["url"]
+    print(redirect_link)
+    return jsonify({"message": "success", "link": str(redirect_link)})
 
 
 if __name__ == "__main__":
