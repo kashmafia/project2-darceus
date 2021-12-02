@@ -12,7 +12,7 @@ from dotenv import load_dotenv, find_dotenv
 import flask
 
 import stripe
-from flask import jsonify, render_template, redirect, request
+from flask import jsonify, render_template, redirect
 from flask.helpers import url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import (
@@ -102,6 +102,12 @@ class Items(db.Model):
         """
         return f"<Item {self.id}>"
 
+    def get_username(self):
+        """
+        Determines what happens when we print an instance of the class
+        """
+        return f"<Item {self.username}>"
+
 
 class BuyerItems(db.Model):
     """
@@ -118,6 +124,12 @@ class BuyerItems(db.Model):
         """
         return f"<Buyer {self.buyer_id}>"
 
+    def get_item_id(self):
+        """
+        Getter for username attribute
+        """
+        return self.item_id
+
 
 class SellerItems(db.Model):
     """
@@ -133,6 +145,12 @@ class SellerItems(db.Model):
         Determines what happens when we print an instance of the class
         """
         return f"<Buyer {self.seller_id}>"
+
+    def get_item_id(self):
+        """
+        Getter for username attribute
+        """
+        return self.item_id
 
 
 class RegisterForm(FlaskForm):
@@ -151,13 +169,17 @@ class RegisterForm(FlaskForm):
 
     submit = SubmitField("Register")
 
-    def validate_username(self, username):
-        existing_user_username = User.query.filter_by(username=username.data).first()
 
-        if existing_user_username:
-            raise ValidationError(
-                "That Username already exists. Please choose a different one."
-            )
+def validate_username(username):
+    """
+        Validate username
+        """
+    existing_user_username = User.query.filter_by(username=username.data).first()
+
+    if existing_user_username:
+        raise ValidationError(
+            "That Username already exists. Please choose a different one."
+        )
 
 
 class LoginForm(FlaskForm):
@@ -243,7 +265,6 @@ def login():
                 user.password, form.password.data.encode("utf-8")
             ):
                 login_user(user)
-                USER = form.username.data
                 # return dashboard(form.username.data)
                 return redirect(url_for("bp.home"))
     return flask.render_template("login.html", form=form,)
@@ -439,5 +460,5 @@ def create_checkout_session():
 
 if __name__ == "__main__":
     app.run(
-        host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", 8081)), debug=True
+        host=os.getenv("IP", "0.0.0.0"), port=int(os.getenv("PORT", "8081")), debug=True
     )
