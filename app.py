@@ -401,25 +401,24 @@ def create_checkout_session():
     Stripe payment API
     """
 
-    # subtotal = flask.request.json.get("subtotal")
+    subtotal = flask.request.json.get("subtotal")
 
-    # # Create product for this checkout session
-    # product = stripe.Product.create(
-    #     name=datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-    # )
-    # price = stripe.Price.create(
-    #     product=f"{product['id']}", unit_amount=int(subtotal) * 100, currency="usd",
-    # )
+    # Create product for this checkout session
+    product = stripe.Product.create(
+        name=datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+    )
+    price = stripe.Price.create(
+        product=f"{product['id']}", unit_amount=int(subtotal) * 100, currency="usd",
+    )
 
-    # print(subtotal, product["id"], price["id"])
+    print(subtotal, product["id"], price["id"])
 
     try:
         checkout_session = stripe.checkout.Session.create(
             line_items=[
                 {
                     # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-                    # "price": f"{price['id']}",
-                    "price": "price_1K265jJ2O3RVC57ZZcqwDmRy",
+                    "price": f"{price['id']}",
                     "quantity": 1,
                 },
             ],
@@ -430,8 +429,6 @@ def create_checkout_session():
             success_url="https://www.google.com/",
             cancel_url="https://www.google.com/",
         )
-
-        # print(url_for("home"))
     except Exception as exceptions:
         print(exceptions)
         return jsonify({"message": "fail"})
