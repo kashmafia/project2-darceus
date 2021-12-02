@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # pylint: disable=no-member
+# pylint: disable=W0703
+
 """
 Server app
 """
