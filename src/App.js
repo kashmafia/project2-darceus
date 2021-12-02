@@ -1,5 +1,5 @@
 import './App.css';
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
 import Hero from './components/Hero';
 import Dashboard from './components/Dashboard';
@@ -16,14 +16,14 @@ function App() {
 
   return (
     <>
-      <Header />
+      <Header username={args.user_name} />
       <main>
         <section className="relative w-full h-full">
           <div>
             <Hero />
           </div>
           <div>
-            <Dashboard products={products} item={cart} setCart={setCart} absolute setProduct={setProduct}/>
+            <Dashboard products={products} item={cart} setCart={setCart} absolute setProduct={setProduct} />
           </div>
           <Footer absolute />
         </section>
