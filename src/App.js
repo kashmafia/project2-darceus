@@ -16,7 +16,7 @@ function App() {
 
   return (
     <>
-      <Header username={args.user_name} />
+      <Header username={args.user_name} item={cart} setCart={setCart} />
       <main>
         <section className="relative w-full h-full">
           <div>
