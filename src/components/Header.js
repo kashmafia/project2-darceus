@@ -36,7 +36,7 @@ const solutions = [
     icon: LightningBoltIcon
   },
   {
-    name: 'Jonathan Choi',
+    name: 'Johnathan Choi',
     description: "Humble God",
     href: 'https://github.com/Jon2234',
     icon: PuzzleIcon,
@@ -221,8 +221,13 @@ function Header({ username, item, setCart }) {
             </div>
             <Cart item={item} open={showItem} setOpen={setShowItem} setCart={setCart} />
           </div>
+
+
+          
         </div>
       </div>
+
+      <></>
 
       <Transition
         as={Fragment}

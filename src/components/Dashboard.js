@@ -3,7 +3,7 @@ import Cart from './Cart';
 
 function Dashboard ({item, products, setCart}) {
     const [showItem, setShowItem] = useState(false)
-    
+
     const addItem = (newItem) => {
         console.log(newItem);
         if (item.some(e => e.id === newItem.id)) {
@@ -43,8 +43,10 @@ function Dashboard ({item, products, setCart}) {
         
         setShowItem(item => !item);
     }
+
     
     return (
+        
         <>
         <div className="bg-white">
             <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -68,6 +70,7 @@ function Dashboard ({item, products, setCart}) {
                                     <button class="w-1/4 flex-auto bg-transparent hover:text-indigo-600 items-center justify-center rounded-md border border-gray-300" 
                                             type="button" 
                                             onClick={() => addItem(product)}>Add to bag</button>
+                                    
                                 </div>
                             </a>
                             
@@ -76,9 +79,11 @@ function Dashboard ({item, products, setCart}) {
                     </div>
                 ): 
                 (<> </>)}
+
+                
             </div>
+
         </div>
-        
 
         <Cart item={item} open={showItem} setOpen={setShowItem} setCart={setCart}/>
         </>
