@@ -426,8 +426,8 @@ def create_checkout_session():
             shipping_address_collection={"allowed_countries": ["US", "CA"],},
             payment_method_types=["card",],
             mode="payment",
-            success_url="https://www.google.com/",
-            cancel_url="https://www.google.com/",
+            success_url="http://fathomless-ravine-12501.herokuapp.com/",
+            cancel_url="http://fathomless-ravine-12501.herokuapp.com/",
         )
     except Exception as exceptions:
         print(exceptions)
