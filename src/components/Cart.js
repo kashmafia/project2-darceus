@@ -40,6 +40,7 @@ export default function Cart({item, open, setOpen, setCart}) {
     total();
   }, [item]);
 
+
   
 
   return (

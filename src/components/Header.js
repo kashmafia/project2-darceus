@@ -12,7 +12,8 @@ import {
 import { DiPostgresql, DiPython, DiReact, DiHeroku } from 'react-icons/di'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 
-import React from 'react';
+import React, {useState} from 'react';
+import Cart from './Cart';
 
 
 const solutions = [
@@ -75,10 +76,13 @@ function classNames(...classes) {
 
 
 
-function Header(props) {
-  return (props.open) ? ( ""
-    
-  ): <Popover className="relative bg-white">
+function Header() {
+
+  const [click, setClick] = useState(false);
+
+
+  return (
+  <Popover className="relative bg-white">
   <div className="max-w-7xl mx-auto px-4 sm:px-6">
     <div className="flex justify-between items-center border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
       <div className="flex justify-start lg:w-0 lg:flex-1">
@@ -210,9 +214,15 @@ function Header(props) {
           <button 
           type="button"
           className="btn ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700" 
-          onClick={() => props.setOpen(true)}
+          onClick={() => setClick(!click)}
           >Shopping Cart
           </button>
+
+          {click &&
+            <div>
+              <Cart setOpen ={setClick}/>
+            </div>
+          }
       </div>
 
 
@@ -296,7 +306,8 @@ function Header(props) {
       </div>
     </Popover.Panel>
   </Transition>
-</Popover>;
+</Popover>
+  )
 }
 
 export default Header;
