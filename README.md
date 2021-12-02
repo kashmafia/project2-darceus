@@ -1,8 +1,26 @@
-Sprint 1 Heroku link: https://obscure-bastion-59408.herokuapp.com/
+Sprint 2 Heroku link: https://fathomless-ravine-12501.herokuapp.com/
+
+# Darceus's headless E-Commerce
+
+## Goal Statement:
+Nowadays, marketplace website often overloaded with thousands of distractions and information that sometime confuse you. Hence, you end up buying something you not really need.Therefore, we create a seamless and straight-forward web application that has no ads, no distraction, and one click button for your convenience.
+
+## Project Tools:
+* PostgresQL - Database
+* Flask - Server/API side
+* ReactJS - Client side
+* Heroku - Deployment
+
+## Frontend
+
+## Backend
+
+## Deployment
 
 
-# Get started with this skeleton
 
+
+## Getting started
 ```
 git clone https://github.com/kashmafia/project2-darceus.git
 cd project2-darceus/
@@ -10,29 +28,7 @@ pip install requirements.txt
 npm install
 ```
 
-## Available Scripts
 
-In the project directory, you can run:
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
