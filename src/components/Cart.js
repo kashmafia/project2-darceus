@@ -4,6 +4,38 @@ import { XIcon } from '@heroicons/react/outline'
 
 export default function Cart({item, open, setOpen, setCart}) {
   const [cartTotal, setCartTotal] = useState(0);
+  // const [paymentLink, setPaymentLink] = useState(null);
+
+  const checkout = () => {
+    async function addItemToCart(cartTotal, item){
+      const getLink = await fetch('/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+          {
+            'subtotal': cartTotal,
+            'cart-item': item
+          }),
+      })
+
+      const link = await getLink.json();
+      return link;
+    }
+
+    addItemToCart(cartTotal, item).then(response => {
+      if(response.message === 'success'){
+        console.log(response.link);
+        window.location.href = response.link;
+      } else{
+        alert(response.message);
+      }
+    });
+  }
+
+
+
   const removeItem = async (removeProduct) => {
     let hardCopy = item;
 
@@ -27,7 +59,6 @@ export default function Cart({item, open, setOpen, setCart}) {
     setCart(hardCopy);
   }
 
-  //TODO: Subtotal
   useEffect(() => {
     const total = () => {
       let totalVal = 0;
@@ -136,7 +167,8 @@ export default function Cart({item, open, setOpen, setCart}) {
                     <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                     <div className="mt-6">
                       <a
-                        href="/#"
+                        href='/#'
+                        onClick={() =>checkout()}
                         className="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
                       >
                         Checkout
