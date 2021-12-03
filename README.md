@@ -1,4 +1,4 @@
-Sprint 2 Heroku link: https://fathomless-ravine-12501.herokuapp.com/
+Sprint 2 Heroku Link: http://fathomless-ravine-12501.herokuapp.com/
 
 # Darceus's headless E-Commerce
 
