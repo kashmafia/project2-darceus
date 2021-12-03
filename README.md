@@ -84,6 +84,8 @@ The server return that specific link to the client and redirect user to that lin
 * NOTE: Be sure to enter your secret keys and api keys in your heroku app config var section.
 
 
+## Linting Note:
+We ignored one pylint error, because python could throw any exception and we would need to catch any of them so we use a general exception.
 
 ## Getting started
 ```
