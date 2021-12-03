@@ -51,7 +51,15 @@ Nowadays, marketplace website often overloaded with thousands of distractions an
 * To start and create server connection: ```npm start```
 
 ## Stripe API
+### Purpose/Background
+The client will send a fetch API that contain the cart item with the subtotal values.
+The server will take care of it to create a new product and the price item with Stripe APIs.
+It also use the APIs stripe provided to make a checkout session object. The checkout session comes with a link.
+The server return that specific link to the client and redirect user to that link.
 
+### Steps
+* First, create a development account from https://dashboard.stripe.com/
+* Next, save your secret key as ```CLIENT_SECRET_KEY``` in your ```.env``` file
 
 ## Postgres Database
 * Create a new Heroku app: ```heroku create```.
