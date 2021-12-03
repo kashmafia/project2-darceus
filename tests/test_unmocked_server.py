@@ -31,8 +31,9 @@ class GetLoginDataTests(unittest.TestCase):
         app.config["DEBUG"] = False
         app.config["SQLALCHEMY_DATABASE_URI"] = uri
         self.app = app.test_client()
-        db.drop_all()
-        db.create_all()
+        # comment for CI/CD
+        # db.drop_all()
+        # db.create_all()
 
     def test_login(self):
         response = self.app.get("/login", follow_redirects=True)
