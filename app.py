@@ -201,7 +201,8 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Login")
 
 
-db.create_all()
+# comment for CI-CD
+# db.create_all()
 
 
 @bp.route("/")

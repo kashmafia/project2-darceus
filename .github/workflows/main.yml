@@ -42,18 +42,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      # Runs unmock tests
-      # - name: Run unmock tests server side
-      #   run: python3 test_unmock.py
-
-      # Runs mock tests
-      # - name: Run mock tests server side
-      #   run: python3 test_mock_apis.py
 
       - run: npm ci
       - run: npm run build --if-present
-      # - run: npm test
-      #   env:
-      #     STRIPE_SECRET_KEY: ${{secrets.SRIPE_SECRET_KEY}}
-      #     DATABASE_URL: ${{secrets.DATABASE_URL}}
+      # Run mock tests
+      - run: python3 tests/test_mocked_server.py
+        env:
+          STRIPE_SECRET_KEY: ${{secrets.SRIPE_SECRET_KEY}}
+          DATABASE_URL: ${{secrets.DATABASE_URL}}
+
+      - run: python3 tests/test_unmocked_server.py
+        env:
+          STRIPE_SECRET_KEY: ${{secrets.SRIPE_SECRET_KEY}}
+          DATABASE_URL: ${{secrets.DATABASE_URL}}
       - run: npx eslint src/
