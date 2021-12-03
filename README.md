@@ -58,7 +58,7 @@ Nowadays, marketplace website often overloaded with thousands of distractions an
 * Create a new remote DB on your new Heroku app: ```heroku addons:create heroku-postgresql:hobby-dev -a {your app name}``` (app name without brackets).
 * Obtain the app configuration variables: ```heroku config```.
 * In your ```.env``` file, create a new entry: ```export SQLALCHEMY_DATABASE_URI = {your app config}``` (config without brackets). In the URL, change ```postgres``` to ```postgresql```.
-* Next, initialize the database User, BuyerItem, SellerItem, Items Tables in your ```app.py```.
+* Next, initialize the database User, BuyerItems, SellerItems, Items Tables in your ```app.py```.
 * Create database with: ```db.create_all()```.
 * To check if your database is created: ```heroku pg:psql -a {app name}``` (app name without brackets). Use ```\d``` to list all your tables.
 
