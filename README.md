@@ -30,7 +30,6 @@ Nowadays, marketplace website often overloaded with thousands of distractions an
 
 
 
-## Getting started
 ### Install Requirements:
 * pip install flask
 * pip install Flask-login
@@ -43,12 +42,7 @@ Nowadays, marketplace website often overloaded with thousands of distractions an
 * pip install psycopg2-binary
 * npm install
 * npm i bcrypt
-```
-git clone https://github.com/kashmafia/project2-darceus.git
-cd project2-darceus/
-pip install requirements.txt
-npm install
-```
+
 
 ## React Build
 * To build your react app, use ```npm run build```
@@ -81,6 +75,15 @@ npm install
 * Back in VS Code terminal run app with command ```heroku open```
 * NOTE: Be sure to enter your secret keys and api keys in your heroku app config var section.
 
+
+
+## Getting started
+```
+git clone https://github.com/kashmafia/project2-darceus.git
+cd project2-darceus/
+pip install requirements.txt
+npm install
+```
 
 ## Available Scripts
 
