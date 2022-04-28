@@ -44,6 +44,7 @@ jobs:
           pip install -r requirements.txt
 
       - run: npm ci
+      - run: npm uninstall webpack
       - run: npm run build --if-present
       # Run mock tests
       - run: python3 tests/test_mocked_server.py
