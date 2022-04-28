@@ -6,7 +6,6 @@ import {
   CurrencyDollarIcon,
   LightningBoltIcon,
   MenuIcon,
-  PuzzleIcon,
   XIcon,
 } from '@heroicons/react/outline'
 import { DiPostgresql, DiPython, DiReact, DiHeroku } from 'react-icons/di'
@@ -24,22 +23,16 @@ const solutions = [
     icon: BadgeCheckIcon,
   },
   {
-    name: 'Kash Mafia',
+    name: 'Linh Ngo',
     description: 'You know who',
     href: 'https://github.com/kashmafia',
     icon: CurrencyDollarIcon,
   },
   {
-    name: 'Derek (Big D) Yong',
+    name: 'Vivian Cao',
     description: "Big D no cap",
     href: '#',
     icon: LightningBoltIcon
-  },
-  {
-    name: 'Johnathan Choi',
-    description: "Humble God",
-    href: 'https://github.com/Jon2234',
-    icon: PuzzleIcon,
   },
 ]
 
