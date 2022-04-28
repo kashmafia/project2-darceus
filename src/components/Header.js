@@ -25,13 +25,13 @@ const solutions = [
   {
     name: 'Linh Ngo',
     description: 'You know who',
-    href: 'https://github.com/kashmafia',
+    href: 'https://github.com/oxlngo',
     icon: CurrencyDollarIcon,
   },
   {
-    name: 'Vivian Cao',
-    description: "Big D no cap",
-    href: '#',
+    name: 'Vivian Do',
+    description: "Slayyy",
+    href: 'https://github.com/odnaiviv',
     icon: LightningBoltIcon
   },
 ]
