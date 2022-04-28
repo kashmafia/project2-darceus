@@ -17,7 +17,7 @@ function Main () {
                     <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
                     Nowadays, marketplace website often overloaded with thousands of distractions and information that sometime confuse you.
                     Hence, you end up buying something you not really need.Therefore, we create a seamless and straight-forward web application 
-                    that has no ads, no distraction, and one click button for your convenience. Enjoy your time!
+                    that has no ads, no distraction, and one click button for your convenience. Enjoy your time! Team1 members
                     </p>
                     <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                     <div className="rounded-md shadow">
