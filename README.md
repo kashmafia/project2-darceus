@@ -1,6 +1,6 @@
-Sprint 2 Heroku Link: http://fathomless-ravine-12501.herokuapp.com/
+Heroku Link: http://fathomless-ravine-12501.herokuapp.com/
 
-# Darceus's headless E-Commerce
+# Propriete Centre headless E-Commerce
 
 ## Goal Statement:
 Nowadays, marketplace website often overloaded with thousands of distractions and information that sometime confuse you. Hence, you end up buying something you not really need.Therefore, we create a seamless and straight-forward web application that has no ads, no distraction, and one click button for your convenience.
